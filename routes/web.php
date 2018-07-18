@@ -11,4 +11,4 @@
 |
 */
 
-Route::get('/', 'TinderController@index');
+Route::get('/', 'ClientController@index');
