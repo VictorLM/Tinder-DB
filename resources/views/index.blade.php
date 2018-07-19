@@ -15,28 +15,25 @@
         <div class="container">
             <div class="row row-eq-height">
 
-                @foreach($users as $user)
+                @foreach($profiles as $profile)
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" style="display:grid;margin-top:0.5em;margin-bottom:0.5em;">
 
                         <div class="card">
-                            <!--
-                            <img class="img-thumbnail rounded img-thumbnail mx-auto d-block" style="max-height:250px;" src="{{json_decode($user->photos)[0]->url ?? null}}">
-                            -->
                             
-                            <div id="carousel-{{$user->id}}" class="carousel slide" data-ride="carousel">
+                            <div id="carousel-{{$profile->id}}" class="carousel slide" data-ride="carousel">
                     
                                 <ol class="carousel-indicators">
-                                    @if(!empty($user->photos) && count(json_decode($user->photos))>0)
-                                        @foreach( json_decode($user->photos) as $imagem )
-                                            <li data-target="#carousel-{{$user->id}}" data-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}"></li>
+                                    @if(!empty($profile->photos) && count(json_decode($profile->photos))>0)
+                                        @foreach( json_decode($profile->photos) as $imagem )
+                                            <li data-target="#carousel-{{$profile->id}}" data-slide-to="{{ $loop->index }}" class="{{ $loop->first ? 'active' : '' }}"></li>
                                         @endforeach
                                     @else
-                                        <li data-target="#carousel-{{$user->id}}" data-slide-to="0" class="active"></li>
+                                        <li data-target="#carousel-{{$profile->id}}" data-slide-to="0" class="active"></li>
                                     @endif
                                 </ol>
                                 <div class="carousel-inner" role="listbox">
-                                    @if(!empty($user->photos) && count(json_decode($user->photos))>0)
-                                        @foreach( json_decode($user->photos) as $imagem )
+                                    @if(!empty($profile->photos) && count(json_decode($profile->photos))>0)
+                                        @foreach( json_decode($profile->photos) as $imagem )
                                             <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
                                                 <img class="d-block img-fluid rounded img-thumbnail mx-auto d-block" style="max-height:400px;" src="{{ $imagem->url ?? null }}" alt="">
                                             </div>
@@ -47,11 +44,11 @@
                                         </div>
                                     @endif
                                 </div>
-                                <a class="carousel-control-prev" href="#carousel-{{$user->id}}" role="button" data-slide="prev">
+                                <a class="carousel-control-prev" href="#carousel-{{$profile->id}}" role="button" data-slide="prev">
                                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                                     <span class="sr-only">Anterior</span>
                                 </a>
-                                <a class="carousel-control-next" href="#carousel-{{$user->id}}" role="button" data-slide="next">
+                                <a class="carousel-control-next" href="#carousel-{{$profile->id}}" role="button" data-slide="next">
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span class="sr-only">Próxima</span>
                                 </a>
@@ -61,12 +58,14 @@
                             <div class="card-body">
                                 <span></span>
                                 <h5 class="card-title">
-                                    {{$user->name ?? null}}, 
-                                    {{(Carbon\Carbon::today()->year - Carbon\Carbon::parse($user->birth_date)->year)  ?? null}}, 
-                                    {{round(($user->distance_mi * 1.60934), 0) ?? null}} Km
+                                    {{$profile->name ?? null}}, 
+                                    {{(Carbon\Carbon::today()->year - Carbon\Carbon::parse($profile->birth_date)->year)  ?? null}}, 
+                                    {{round(($profile->distance_mi * 1.60934), 0) ?? null}} Km
+                                    <a href="https://www.google.com.br/maps/search/lat,lon/" target="_blank">Mapa icon</a>
+                                    <a href="#" target="_blank">IG icon</a>
                                 </h5>
                                 <ul class="list-group list-group-flush">
-                                    <li class="list-group-item"><strong>Bio:&nbsp;</strong>{{$user->bio ?? null}}</li>
+                                    <li class="list-group-item"><strong>Bio:&nbsp;</strong>{{$profile->bio ?? null}}</li>
                                 </ul>
                             </div>
                         </div>

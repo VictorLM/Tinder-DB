@@ -12,3 +12,5 @@
 */
 
 Route::get('/', 'ClientController@index');
+Route::get('/recs', 'ClientController@get_recomendations');
+Route::get('/profile', 'ClientController@get_current_location');
