@@ -27,9 +27,9 @@ class Profiles extends Migration
             $table->integer('common_like_count')->nullable();
             $table->integer('connection_count')->nullable();
             $table->text('bio')->nullable();
-            $table->timestamp('birth_date')->nullable();
+            $table->dateTime('birth_date')->nullable();
             $table->string('name', 255)->nullable();
-            $table->timestamp('ping_time')->nullable();
+            $table->dateTime('ping_time')->nullable();
             $table->text('photos')->nullable();
             $table->text('instagram')->nullable();
             $table->text('jobs')->nullable();
@@ -39,6 +39,8 @@ class Profiles extends Migration
             $table->integer('gender')->nullable();
             $table->string('birth_date_info', 255)->nullable();
             $table->string('s_number', 255)->nullable();
+            $table->boolean('liked')->nullable()->default(0);
+            $table->boolean('match')->nullable()->default(0);
             $table->timestamps();
         });
     }

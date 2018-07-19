@@ -1,0 +1,11 @@
+.inline-input{
+    padding:0.2em;
+}
+
+@media (min-width: 1200px){
+    .container-index {
+        max-width: 1400px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+}
