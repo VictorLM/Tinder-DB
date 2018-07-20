@@ -89,7 +89,7 @@
                                 <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" style="display:grid;margin-top:0.5em;margin-bottom:0.5em;">
             
                                     <div class="card">
-                                        <!--
+                                        
                                         <div id="carousel-{{$profile->id}}" class="carousel slide" data-ride="carousel">
                                 
                                             <ol class="carousel-indicators">
@@ -120,7 +120,7 @@
                                             </a>
                                             
                                         </div>
-                                        -->
+                                        
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
