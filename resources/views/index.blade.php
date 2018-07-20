@@ -4,9 +4,9 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="">
-        <meta name="author" content="">
-        <link rel="icon" href="../../../../favicon.ico">
-        <title>TESTE</title>
+        <meta name="author" content="Victor Meireles - @IAmDinamite">
+        <link rel="icon" href="">
+        <title>Tinder-DB</title>
         <!-- Bootstrap core CSS -->
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" rel="stylesheet">
@@ -27,6 +27,23 @@
 
             <div class="card" style="margin-top:1em;">
                 <div class="card-header">
+
+                    <div class="text-center row">
+                        <div class="col-4">
+                            <img class="img-fluid index-max-height" src="{{url('images/IYKWIM-MR-BEAN-1.png')}}">
+                            <img class="img-fluid index-max-height" src="{{url('images/IYKWIM-MR-BEAN-2.png')}}">
+                        </div>
+                        <div class="col-4">
+                            <h1 class="display-2 font-weight-normal">Tinder-DB</h1>
+                        </div>
+                        <div class="col-4">
+                            <img class="img-fluid index-max-height" src="{{url('images/IYKWIM-MR-BEAN-1.png')}}">
+                            <img class="img-fluid index-max-height" src="{{url('images/IYKWIM-MR-BEAN-2.png')}}">
+                        </div>
+                    </div>
+
+                    ROTA JA LIKADOS, ROTA MATCHES, ON CLICK LIKE AJAX E IF RESPONSE TRUE DELETE DIV BY ID
+                    <hr/>
                     <form class="" method="POST" id="form" action="{{action('ClientController@search')}}">
                         {{ csrf_field() }}
                         <div class="row">
@@ -141,11 +158,14 @@
                                                     @if(!empty($profile->instagram) && $profile->instagram != "null")
                                                         <a href="https://www.instagram.com/{{json_decode($profile->instagram)->username ?? null}}" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>&nbsp;
                                                     @endif
-                                                    <a href="https://www.google.com.br/maps/search/{{$profile->search_location->lat ?? null}},{{$profile->search_location->lon ?? null}}/" target="_blank"><i class="fas fa-map-marker-alt fa-2x"></i></a>
+                                                    @if(!empty($profile->spotify) && $profile->spotify != "null")
+                                                        <a href="https://www.instagram.com/{{json_decode($profile->spotify)->username ?? null}}" target="_blank"><i class="fab fa-spotify fa-2x"></i></a>&nbsp;
+                                                    @endif
+                                                    <a href="https://www.google.com.br/maps/search/{{$profile->logged_profile->lat ?? null}},{{$profile->logged_profile->lon ?? null}}/" target="_blank"><i class="fas fa-map-marker-alt fa-2x"></i></a>
                                                 </div>
                                             </div>
                                             <ul class="list-group list-group-flush">
-                                                <li class="list-group-item"><strong>Bio:&nbsp;</strong>{{$profile->bio ?? null}}</li>
+                                                <li class="list-group-item text-justify"><strong>Bio:&nbsp;</strong>{{$profile->bio ?? null}}</li>
                                             </ul>
                                         </div>
                                     </div>

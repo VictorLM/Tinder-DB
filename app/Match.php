@@ -4,12 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Profile extends Model{
-    protected $table = 'profiles';
+class Match extends Model
+{
+    protected $table = 'matches';
     protected $guarded = [];
 
     public function logged_profile(){
         return $this->belongsTo('App\Logged_Profile', 'logged_profile_id');
     }
-
+    public function profile(){
+        return $this->belongsTo('App\Profile', 'profile_id');
+    }
 }

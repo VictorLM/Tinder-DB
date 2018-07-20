@@ -20,4 +20,5 @@ Route::get('/recs', 'ClientController@get_recomendations');
 Route::get('/profile', 'ClientController@get_profile');
 Route::get('/updates', 'ClientController@get_updates');//MATCHES
 Route::get('/meta', 'ClientController@get_meta');//RATING->LIKES_REMAINING
-Route::get('/like', 'ClientController@like');
+Route::get('/massive-like', 'ClientController@massive_like');
+Route::get('/like/{id}', 'ClientController@like');
