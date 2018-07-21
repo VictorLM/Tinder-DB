@@ -103,7 +103,7 @@
                         @if(isset($profiles) && $profiles->count()>0)
 
                             @foreach($profiles as $profile)
-                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" style="display:grid;margin-top:0.5em;margin-bottom:0.5em;">
+                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" id="card-{{$profile->tinder_id}}" style="display:grid;margin-top:0.5em;margin-bottom:0.5em;">
             
                                     <div class="card">
                                         
@@ -155,6 +155,19 @@
                                                     </h5>
                                                 </div>
                                                 <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+
+                                                        &nbsp;
+                                                    <a href="/#/{{$profile->tinder_id}}"><i class="fas fa-times-circle fa-2x" style="color:red;"></i></a>
+                                                    &nbsp;
+                                                    <a class="like" id="{{$profile->tinder_id}}" data-link="{{$profile->tinder_id}}">
+                                                        <i class="fas fa-heart fa-2x like-icon" style="color:green;"></i>
+                                                    </a>
+
+                                                </div>
+                                            </div>
+                                            <hr/>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
                                                     @if(!empty($profile->instagram) && $profile->instagram != "null")
                                                         <a href="https://www.instagram.com/{{json_decode($profile->instagram)->username ?? null}}" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>&nbsp;
                                                     @endif
@@ -188,9 +201,10 @@
             <br/>
         </div>
 
-        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+        <script src="{{url('js/jquery.js')}}"></script>
 
     </body>
 

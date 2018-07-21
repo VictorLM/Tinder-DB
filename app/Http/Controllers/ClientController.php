@@ -257,23 +257,22 @@ class ClientController extends Controller
             }
         }
     }
-    /////REVER POR CONTA DO PROFILE LOGGED ID   
+      
     public function like(Request $request, $id){
+        $logged_profile_id = $this->get_profile($request);
         $profile = Profile::select('id','tinder_id')->where('tinder_id', $id)->first();
-
-        dd($profile);
-
-        foreach($profiles as $profile){
-            $url = '/like/'.$profile->tinder_id;
-            $method = 'GET';
-            $body = null;
-            $like = $this->request($url, $method, $body);
-            if($like){
-                $profile->update(['liked' => 1]);
-                return true;
-            }else{
-                return false;
-            }
+        $url = '/like/'.$profile->tinder_id;
+        $method = 'GET';
+        $body = null;
+        $like = $this->request($url, $method, $body);
+        if($like){
+            $liked = new Like;
+            $liked->logged_profile_id = $logged_profile_id->id;
+            $liked->profile_id = $profile->id;
+            $liked->save();
+            return json_encode(array('success' => true));
+        }else{
+            return json_encode(array('success' => false));
         }
     }
     /////REVER POR CONTA DO PROFILE LOGGED ID
@@ -281,6 +280,7 @@ class ClientController extends Controller
         //20/07 09H10MIN
         set_time_limit(7200);//DUAS HORAS
         $profiles = Profile::select('id','tinder_id','liked','gender')->where('gender',1)->where('liked', null)->limit(100)->get();
+        
         //dd($profiles[0]);
         $likes = 0;
         foreach($profiles as $profile){

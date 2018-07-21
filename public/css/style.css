@@ -4,6 +4,12 @@
 .index-max-height{
     max-height: 100px;
 }
+.like-icon{
+    cursor: pointer;
+}
+.like-icon:hover{
+    opacity: 0.8;
+}
 @media (min-width: 1200px){
     .container-index {
         max-width: 1400px;
