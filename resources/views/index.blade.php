@@ -42,7 +42,7 @@
                         </div>
                     </div>
 
-                    ROTA JA LIKADOS, ROTA MATCHES, ON CLICK LIKE AJAX E IF RESPONSE TRUE DELETE DIV BY ID
+                    ROTA JA LIKADOS, ROTA MATCHES, DEPLOY DEMAIS AÇÕES DOS BOTÕES
                     <hr/>
                     <form class="" method="POST" id="form" action="{{action('ClientController@search')}}">
                         {{ csrf_field() }}
@@ -103,9 +103,17 @@
                         @if(isset($profiles) && $profiles->count()>0)
 
                             @foreach($profiles as $profile)
-                                <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" id="card-{{$profile->tinder_id}}" style="display:grid;margin-top:0.5em;margin-bottom:0.5em;">
+                                <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3" id="card-{{$profile->tinder_id}}" style="display:grid;margin-top:0.5em;margin-bottom:0.5em;">
             
                                     <div class="card">
+
+                                        <div class="spinner-div" id="div-loader-{{$profile->tinder_id}}">
+                                            <div class="spinner" id="loader-{{$profile->tinder_id}}">
+                                            </div>
+                                            <div class="liked" id="liked-{{$profile->tinder_id}}">
+                                                <i class="fas fa-check fa-7x" style="color:#00ff00;"></i>
+                                            </div>
+                                        </div>
                                         
                                         <div id="carousel-{{$profile->id}}" class="carousel slide" data-ride="carousel">
                                 
@@ -122,17 +130,21 @@
                                                 @if(!empty($profile->photos) && count(json_decode($profile->photos))>0)
                                                     @foreach( json_decode($profile->photos) as $imagem )
                                                         <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                                                            <img class="d-block img-fluid rounded img-thumbnail mx-auto d-block" style="max-height:400px;" src="{{ $imagem->processedFiles[1]->url ?? null }}" alt="">
+                                                            <img class="d-block img-fluid rounded mx-auto d-block carousel-img" src="{{ $imagem->processedFiles[1]->url ?? null }}" alt="">
                                                         </div>
                                                     @endforeach
                                                 @endif
                                             </div>
                                             <a class="carousel-control-prev" href="#carousel-{{$profile->id}}" role="button" data-slide="prev">
-                                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                <span class="carousel-control-prev-icon" aria-hidden="true">
+                                                    <i class="fas fa-arrow-alt-circle-left fa-2x"></i>
+                                                </span>
                                                 <span class="sr-only">Anterior</span>
                                             </a>
                                             <a class="carousel-control-next" href="#carousel-{{$profile->id}}" role="button" data-slide="next">
-                                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                <span class="carousel-control-next-icon" aria-hidden="true">
+                                                    <i class="fas fa-arrow-alt-circle-right fa-2x"></i>
+                                                </span>
                                                 <span class="sr-only">Próxima</span>
                                             </a>
                                             
@@ -140,41 +152,64 @@
                                         
                                         <div class="card-body">
                                             <div class="row">
-                                                <div class="col-xs-12 col-sm-8 col-md-8 col-lg-8">
-                                                    <h5 class="card-title">
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                    <h6>
                                                         @if(!$profile->gender)
-                                                            <i class="fas fa-mars fa-lg" style="color:#3366cc;"></i>
+                                                            <i class="fas fa-mars fa-lg" style="color:#3366cc;" title="Masculino"></i>
                                                         @elseif($profile->gender)
-                                                            <i class="fas fa-venus fa-lg" style="color:#ff33cc;"></i>
+                                                            <i class="fas fa-venus fa-lg" style="color:#ff33cc;" title="Feminino"></i>
                                                         @else
-                                                            <i class="fas fa-genderless fa-lg"></i>
+                                                            <i class="fas fa-genderless fa-lg" title="Outros"></i>
                                                         @endif
                                                         {{$profile->name ?? null}}, 
                                                         {{(Carbon\Carbon::today()->year - Carbon\Carbon::parse($profile->birth_date)->year-1)  ?? null}}, 
-                                                        {{round(($profile->distance_mi * 1.60934), 0) ?? null}} Km
-                                                    </h5>
-                                                </div>
-                                                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
-
-                                                        &nbsp;
-                                                    <a href="/#/{{$profile->tinder_id}}"><i class="fas fa-times-circle fa-2x" style="color:red;"></i></a>
-                                                    &nbsp;
-                                                    <a class="like" id="{{$profile->tinder_id}}" data-link="{{$profile->tinder_id}}">
-                                                        <i class="fas fa-heart fa-2x like-icon" style="color:green;"></i>
-                                                    </a>
-
+                                                        {{round(($profile->distance_mi * 1.60934), 0) ?? null}} Km 
+                                                        <a href="https://www.google.com.br/maps/search/{{$profile->logged_profile->lat ?? null}},{{$profile->logged_profile->lon ?? null}}/" target="_blank">daqui</a>
+                                                    </h6>
                                                 </div>
                                             </div>
-                                            <hr/>
                                             <div class="row">
-                                                <div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                                        @if(!empty($profile->teasers))
+                                                        @foreach(json_decode($profile->teasers) as $teaser)
+                                                            @if($teaser->type != "instagram")
+                                                                <p class="teasers">{{$teaser->string}}</p>
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <hr class="hr-card"/>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center actions-div">
+                                                    <a href="/#/{{$profile->tinder_id}}" class="float-left"><i class="fas fa-times-circle fa-3x action-icon" style="color:red;" title="Passar"></i></a>
+                                                    <a href="" class=""><i class="fas fa-star fa-3x action-icon" title="Super Like"></i></a>
+                                                    <a class="like float-right" id="{{$profile->tinder_id}}" data-link="{{$profile->tinder_id}}"><i class="fas fa-heart fa-3x action-icon" title="Gostar" style="color:green;"></i></a>
+                                                </div>
+                                            </div>
+                                            <hr class="hr-card"/>
+                                            <div class="row">
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                                    <a href="https://www.google.com.br/maps/search/{{$profile->logged_profile->lat ?? null}},{{$profile->logged_profile->lon ?? null}}/" target="_blank"><i class="fas fa-map-marker-alt fa-2x" title="Localização"></i></a>&nbsp;
                                                     @if(!empty($profile->instagram) && $profile->instagram != "null")
-                                                        <a href="https://www.instagram.com/{{json_decode($profile->instagram)->username ?? null}}" target="_blank"><i class="fab fa-instagram fa-2x"></i></a>&nbsp;
+                                                        <a href="https://www.instagram.com/{{json_decode($profile->instagram)->username ?? null}}" target="_blank"><i class="fab fa-instagram fa-2x" title="Instagram"></i></a>&nbsp;
                                                     @endif
-                                                    @if(!empty($profile->spotify) && $profile->spotify != "null")
-                                                        <a href="https://www.instagram.com/{{json_decode($profile->spotify)->username ?? null}}" target="_blank"><i class="fab fa-spotify fa-2x"></i></a>&nbsp;
+                                                    @if(!empty($profile->spotify_theme_track) && $profile->spotify_theme_track != "null")
+                                                        <a href="" target="_blank"><i class="fab fa-spotify fa-2x" title="Spotify"></i></a>
                                                     @endif
-                                                    <a href="https://www.google.com.br/maps/search/{{$profile->logged_profile->lat ?? null}},{{$profile->logged_profile->lon ?? null}}/" target="_blank"><i class="fas fa-map-marker-alt fa-2x"></i></a>
+                                                </div>
+                                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
+                                                    <p class="teasers text-right"><b>Interesse: </b>
+                                                        @if(!$profile->logged_profile->gender)
+                                                            <i class="fas fa-mars fa-lg" style="color:#3366cc;" title="Masculino"></i>
+                                                        @elseif($profile->logged_profile->gender)
+                                                            <i class="fas fa-venus fa-lg" style="color:#ff33cc;" title="Feminino"></i>
+                                                        @else
+                                                            <i class="fas fa-genderless fa-lg" title="Outros"></i>
+                                                        @endif
+                                                        , {{(Carbon\Carbon::today()->year - Carbon\Carbon::parse($profile->logged_profile->birth_date)->year-1)  ?? null}}
+                                                    </p>
+                                                    <p class="teasers text-right"><b>Região:</b> {{$profile->logged_profile->city}}</p>
                                                 </div>
                                             </div>
                                             <ul class="list-group list-group-flush">

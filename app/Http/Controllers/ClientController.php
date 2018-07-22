@@ -15,20 +15,16 @@ use Illuminate\Validation\Rule;
 
 class ClientController extends Controller
 {
-    //TESTAR SE NÃO MOSTRA OS LIKADOS MESMO
-    //MOVER ESSAS FUNÇÕES PARA SITECONTROLLER
-    //PRINTAR MAIS INFORMAÇÕES
-    //CRIAR BOTÕES COM AÇÕES IF LIKED
     public function index(Request $request){
         $profile_id = $this->get_profile($request);
         if($profile_id){
             $logged_profile_ids = Logged_Profile::where('tinder_id', $profile_id->tinder_id)->pluck('id')->all();
             $liked_ids = Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
-            $profiles = Profile::with('logged_profile:id,lat,lon')
+            $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
                 ->whereNotIn('id', $liked_ids)
                 ->orderBy('created_at', 'desc')
-                ->paginate(21);
-            //dd($profiles);
+                ->paginate(24);
+            //dd($profiles[0]);
             return view('index', compact('profiles'));
         }else{
             return ("Erro. Não foi possivél acessar o seu perfil.");
@@ -110,7 +106,7 @@ class ClientController extends Controller
                 }else{
                     $profiles->orderBy('created_at', 'desc');
                 }
-                $profiles = $profiles->paginate(21);
+                $profiles = $profiles->paginate(24);
                 return view('index', compact('profiles', 'nome', 'bio', 'idade', 'genero', 'distancia', 'orderby'));
             }else{
                 return ("Erro. Não foi possivél acessar o seu perfil.");
@@ -180,7 +176,7 @@ class ClientController extends Controller
                     'name' => $profile->name ?? null,
                     'photos' => json_encode($profile->photos ?? null),
                     'instagram' => json_encode($profile->instagram ?? null),
-                    'spotify' => json_encode($profile->spotify ?? null),
+                    'spotify_theme_track' => json_encode($profile->spotify ?? null),
                     'ping_time' => Carbon::parse($profile->ping_time)->format('Y-m-d H:i:s') ?? null,
                     'full_pos_info' => json_encode($profile->pos_info ?? null),
                     'at' => $profile->pos->at ?? null,
@@ -244,7 +240,7 @@ class ClientController extends Controller
                         'ping_time' => Carbon::parse($rec->ping_time)->format('Y-m-d H:i:s') ?? null,
                         'photos' => json_encode($rec->photos ?? null),
                         'instagram' => json_encode($rec->instagram ?? null),
-                        'spotify' => json_encode($rec->spotify ?? null),
+                        'spotify_theme_track' => json_encode($rec->spotify_theme_track ?? null),
                         'jobs' => json_encode($rec->jobs ?? null),
                         'schools' => json_encode($rec->schools ?? null),
                         'teaser' => json_encode($rec->teaser ?? null),
@@ -279,8 +275,8 @@ class ClientController extends Controller
     public function massive_like(){
         //20/07 09H10MIN
         set_time_limit(7200);//DUAS HORAS
+        /*
         $profiles = Profile::select('id','tinder_id','liked','gender')->where('gender',1)->where('liked', null)->limit(100)->get();
-        
         //dd($profiles[0]);
         $likes = 0;
         foreach($profiles as $profile){
@@ -294,7 +290,15 @@ class ClientController extends Controller
             }
         }
         return (Carbon::now()." - ".$likes." Likes.");
+        */
     }
 
+    public function teste(){
+        $url = '';
+        $method = 'GET';
+        $body = null;
+        $infos = $this->request($url, $method, $body);
+        dd($infos);
+    }
 
 }

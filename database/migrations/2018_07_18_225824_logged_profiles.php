@@ -30,7 +30,7 @@ class LoggedProfiles extends Migration
             $table->string('name', 255)->nullable()->default(null);
             $table->text('photos')->nullable()->default(null);
             $table->text('instagram')->nullable()->default(null);
-            $table->text('spotify')->nullable()->default(null);
+            $table->text('spotify_theme_track')->nullable()->default(null);
             $table->dateTime('ping_time')->nullable()->default(null);
             $table->string('at', 255)->nullable()->default(null);
             $table->string('lat', 255)->nullable()->default(null);

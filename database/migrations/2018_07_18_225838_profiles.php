@@ -32,7 +32,7 @@ class Profiles extends Migration
             $table->dateTime('ping_time')->nullable()->default(null);
             $table->text('photos')->nullable()->default(null);
             $table->text('instagram')->nullable()->default(null);
-            $table->text('spotify')->nullable()->default(null);
+            $table->text('spotify_theme_track')->nullable()->default(null);
             $table->text('jobs')->nullable()->default(null);
             $table->text('schools')->nullable()->default(null);
             $table->text('teaser')->nullable()->default(null);
