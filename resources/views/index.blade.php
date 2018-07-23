@@ -6,7 +6,7 @@
         <meta name="description" content="">
         <meta name="author" content="Victor Meireles - @IAmDinamite">
         <link rel="icon" href="">
-        <title>Tinder-DB</title>
+        <title>Tinder Tools</title>
         <!-- Bootstrap core CSS -->
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet">
         <link href="https://use.fontawesome.com/releases/v5.1.1/css/all.css" rel="stylesheet">
@@ -29,14 +29,13 @@
                 <div class="card-header">
 
                     <div class="text-center row">
-                        <div class="col-4">
-                            <img class="img-fluid index-max-height" src="{{url('images/IYKWIM-MR-BEAN-1.png')}}">
-                            <img class="img-fluid index-max-height" src="{{url('images/IYKWIM-MR-BEAN-2.png')}}">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                            LOGGED PROFILE
                         </div>
-                        <div class="col-4">
-                            <h1 class="display-2 font-weight-normal">Tinder-DB</h1>
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <h1 class="display-2 font-weight-normal">Tinder Tools</h1>
                         </div>
-                        <div class="col-4">
+                        <div class="col-xs-0 col-sm-0 col-md-0 col-lg-3">
                             <img class="img-fluid index-max-height" src="{{url('images/IYKWIM-MR-BEAN-1.png')}}">
                             <img class="img-fluid index-max-height" src="{{url('images/IYKWIM-MR-BEAN-2.png')}}">
                         </div>
@@ -172,7 +171,7 @@
                                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                                         @if(!empty($profile->teasers))
                                                         @foreach(json_decode($profile->teasers) as $teaser)
-                                                            @if($teaser->type != "instagram")
+                                                            @if($teaser->type != "instagram" && $teaser->type != "artists")
                                                                 <p class="teasers">{{$teaser->string}}</p>
                                                             @endif
                                                         @endforeach
@@ -207,7 +206,7 @@
                                                         @else
                                                             <i class="fas fa-genderless fa-lg" title="Outros"></i>
                                                         @endif
-                                                        , {{(Carbon\Carbon::today()->year - Carbon\Carbon::parse($profile->logged_profile->birth_date)->year-1)  ?? null}}
+                                                        , {{(Carbon\Carbon::today()->year - Carbon\Carbon::parse($profile->logged_profile->birth_date)->year)  ?? null}}
                                                     </p>
                                                     <p class="teasers text-right"><b>Região:</b> {{$profile->logged_profile->city}}</p>
                                                 </div>
