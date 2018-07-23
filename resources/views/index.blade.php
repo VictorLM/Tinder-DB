@@ -129,7 +129,7 @@
                                                 @if(!empty($profile->photos) && count(json_decode($profile->photos))>0)
                                                     @foreach( json_decode($profile->photos) as $imagem )
                                                         <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                                                            <img class="d-block img-fluid rounded mx-auto d-block carousel-img" src="{{ $imagem->processedFiles[1]->url ?? null }}" alt="">
+                                                            <img class="d-block img-fluid rounded mx-auto d-block carousel-img" src="{{ $imagem ?? null }}" alt="">
                                                         </div>
                                                     @endforeach
                                                 @endif
@@ -193,7 +193,7 @@
                                                     @if(!empty($profile->instagram) && $profile->instagram != "null")
                                                         <a href="https://www.instagram.com/{{json_decode($profile->instagram)->username ?? null}}" target="_blank"><i class="fab fa-instagram fa-2x" title="Instagram"></i></a>&nbsp;
                                                     @endif
-                                                    @if(!empty($profile->spotify_theme_track) && $profile->spotify_theme_track != "null")
+                                                    @if(!empty($profile->spotify))
                                                         <a href="" target="_blank"><i class="fab fa-spotify fa-2x" title="Spotify"></i></a>
                                                     @endif
                                                 </div>

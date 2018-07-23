@@ -21,7 +21,7 @@ class Matches extends Migration
             $table->unsignedInteger('profile_id')->nullable()->default(null);
             $table->foreign('profile_id')->references('id')->on('profiles');
             $table->dateTime('date')->nullable();
-            $table->text('full_match_info')->nullable()->default(null);
+            $table->string('full_match_info', 1000)->nullable()->default(null);
             $table->timestamps();
         });
     }

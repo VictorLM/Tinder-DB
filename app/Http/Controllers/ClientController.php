@@ -116,7 +116,8 @@ class ClientController extends Controller
 
     //////////////////////////////////////////////////////////////////////////////////////////////
     function request($url, $method, $body){
-        $tinder_token = DB::table('tokens')->where('name', 'Tinder Access Token')->value('value');
+        //$tinder_token = DB::table('tokens')->where('name', 'Tinder Access Token')->value('value');
+        $tinder_token = "debdf3dd-9eba-4d07-a5c6-c245ab38e42b";
         $client = new Client();
         $headers = [
             'app_version'   => '6.9.4',
@@ -149,6 +150,16 @@ class ClientController extends Controller
         $profile = $this->request($url, $method, $body);
         //dd($profile);
         if($profile){
+            $photos = array();
+            $spotify = []; //https://open.spotify.com/artist/
+            foreach($profile->photos as $photo){
+                $photos[] = $photo->url;
+            }
+            if(isset($rec->spotify_theme_track->artists)){
+                foreach($rec->spotify_theme_track->artists as $artist){
+                    $spotify[] = $artist;
+                }
+            }
             $profile_id = Logged_Profile::updateOrCreate(
                 [
                     'tinder_id' => $profile->_id, 
@@ -174,9 +185,9 @@ class ClientController extends Controller
                     'gender_filter' => $profile->gender_filter ?? null,
                     'interested_in' => json_encode($profile->interested_in ?? null),
                     'name' => $profile->name ?? null,
-                    'photos' => json_encode($profile->photos ?? null),
-                    'instagram' => json_encode($profile->instagram ?? null),
-                    'spotify_theme_track' => json_encode($profile->spotify ?? null),
+                    'photos' => json_encode($photos) ?? null,
+                    'instagram' => $profile->instagram->username ?? null,
+                    'spotify' => json_encode($spotify) ?? null,
                     'ping_time' => Carbon::parse($profile->ping_time)->format('Y-m-d H:i:s') ?? null,
                     'full_pos_info' => json_encode($profile->pos_info ?? null),
                     'at' => $profile->pos->at ?? null,
@@ -221,6 +232,16 @@ class ClientController extends Controller
         if($recs){
             $logged_profile_id = $this->get_profile($request);
             foreach($recs->results as $rec){
+                $photos = [];
+                $spotify = []; //https://open.spotify.com/artist/
+                foreach($rec->photos as $photo){
+                    $photos[] = $photo->url;
+                }
+                if(isset($rec->spotify_theme_track->artists)){
+                    foreach($rec->spotify_theme_track->artists as $artist){
+                        $spotify[] = $artist;
+                    }
+                }
                 Profile::updateOrCreate(
                     ['tinder_id' => $rec->_id],
                     [
@@ -238,12 +259,11 @@ class ClientController extends Controller
                         'birth_date' => Carbon::parse($rec->birth_date)->format('Y-m-d H:i:s') ?? null,
                         'name' => $rec->name ?? null,
                         'ping_time' => Carbon::parse($rec->ping_time)->format('Y-m-d H:i:s') ?? null,
-                        'photos' => json_encode($rec->photos ?? null),
-                        'instagram' => json_encode($rec->instagram ?? null),
-                        'spotify_theme_track' => json_encode($rec->spotify_theme_track ?? null),
+                        'photos' => json_encode($photos) ?? null,
+                        'instagram' => $rec->instagram->username ?? null,
+                        'spotify' => json_encode($spotify) ?? null,
                         'jobs' => json_encode($rec->jobs ?? null),
                         'schools' => json_encode($rec->schools ?? null),
-                        'teaser' => json_encode($rec->teaser ?? null),
                         'teasers' => json_encode($rec->teasers ?? null),
                         'gender' => $rec->gender ?? null,
                         'birth_date_info' => $rec->birth_date_info ?? null,
