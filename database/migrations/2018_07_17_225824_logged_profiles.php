@@ -28,7 +28,7 @@ class LoggedProfiles extends Migration
             $table->integer('gender_filter')->nullable()->default(null);
             $table->string('interested_in')->nullable()->default(null);
             $table->string('name', 100)->nullable()->default(null);
-            $table->string('photos', 1000)->nullable()->default(null);
+            $table->string('photos', 2000)->nullable()->default(null);
             $table->string('instagram', 100)->nullable()->default(null);
             $table->string('spotify', 255)->nullable()->default(null);
             $table->dateTime('ping_time')->nullable()->default(null);

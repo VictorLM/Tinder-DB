@@ -14,10 +14,12 @@
 Route::get('/', 'SiteController@index');
 
 //ROTAS TINDER-TOOLS
+Route::get('/tinder-tools', 'TinderController@index');
 
-Route::post('/search', 'ClientController@search');
+Route::post('/search', 'TinderController@search');
 //ROTA ABAIXA É PRA FUNCIONAR O PAGINATION
-Route::get('/search', 'ClientController@search');
+Route::get('/search', 'TinderController@search');
+
 
 Route::get('/recs', 'ClientController@get_recomendations');
 

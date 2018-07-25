@@ -30,7 +30,7 @@ class Profiles extends Migration
             $table->dateTime('birth_date')->nullable()->default(null);
             $table->string('name', 255)->nullable()->default(null);
             $table->dateTime('ping_time')->nullable()->default(null);
-            $table->string('photos', 1000)->nullable()->default(null);
+            $table->string('photos', 2000)->nullable()->default(null);
             $table->string('instagram', 100)->nullable()->default(null);
             $table->string('spotify', 255)->nullable()->default(null);
             $table->string('jobs', 255)->nullable()->default(null);

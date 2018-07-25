@@ -16,6 +16,11 @@ use Illuminate\Validation\Rule;
 class TinderController extends Controller
 {
     public function index(Request $request){
+        $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
+            ->orderBy('created_at', 'desc')
+            ->paginate(24);
+        return view('tinder-tools.index', compact('profiles'));
+        /*
         $profile_id = $this->get_profile($request);
         if($profile_id){
             $logged_profile_ids = Logged_Profile::where('tinder_id', $profile_id->tinder_id)->pluck('id')->all();
@@ -24,11 +29,11 @@ class TinderController extends Controller
                 ->whereNotIn('id', $liked_ids)
                 ->orderBy('created_at', 'desc')
                 ->paginate(24);
-            //dd($profiles[0]);
-            return view('index', compact('profiles'));
+            return view('tinder-tools.index', compact('profiles'));
         }else{
             return ("Erro. Não foi possivél acessar o seu perfil.");
         }
+        */
     }
 
     public function search(Request $request){
@@ -38,9 +43,12 @@ class TinderController extends Controller
             'idade' => 'nullable|integer|between:18,99',
             'genero' => [
                 'nullable',
-                Rule::in(['masculino', 'feminino', 'outros']),
+                Rule::in(['hm', 'hh', 'mh', 'mm', 'outros']),
             ],
-            'distancia' => 'nullable|integer|between:0,999',
+            'instagram' => [
+                'nullable',
+                Rule::in(['instagrams', 'instagramn', 'todos']),
+            ],
             'orderby' => [
                 'nullable',
                 Rule::in(['nomeaz', 'nomeza', 'idade01', 'idade10', 'distancia01', 'distancia10']),
@@ -50,67 +58,87 @@ class TinderController extends Controller
         if ($validatedData->fails()){
             return redirect()->back()->withErrors($validatedData)->withInput();
         }else{
-            $profile_id = $this->get_profile($request);
-            if($profile_id){
-                $logged_profile_ids = Logged_Profile::where('tinder_id', $profile_id->tinder_id)->pluck('id')->all();
-                $liked_ids = Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
-                $profiles = Profile::with('logged_profile:id,lat,lon')->whereNotIn('id', $liked_ids);
-                $nome = null;
-                $bio = null;
-                $idade = null;
-                $genero = null;
-                $distancia = null;
-                $orderby = null;
-                if(!empty($request->nome)){
-                    $profiles->where('name', 'like', '%'.$request->nome.'%');
-                    $nome = $request->nome;
-                }
-                if(!empty($request->bio)){
-                    $profiles->where('bio', 'like', '%'.$request->bio.'%');
-                    $bio = $request->bio;
-                }
-                if(!empty($request->idade)){
-                    $profiles->whereYear('birth_date', (Carbon::today()->year - $request->idade - 1));
-                    $idade = $request->idade;
-                }
-                if(!empty($request->genero)){
-                    if($request->genero == "masculino"){
-                        $profiles->where('gender', 0);
-                    }elseif($request->genero == "feminino"){
-                        $profiles->where('gender', 1);
-                    }elseif($request->genero == "outros"){
-                        $profiles->whereNotIn('gender', [0, 1]);
-                    }
-                    $genero = $request->genero;
-                }
-                if(!empty($request->distancia)){
-                    //AJUSTAR AQUI QUANDO MOSTRAR SEARCH_LOCATION
-                    $profiles->where('distance_mi', '<=', round(($request->distancia * 1.60934), 0));
-                    $distancia = $request->distancia;
-                }
-                if(!empty($request->orderby)){
-                    if($request->orderby == "nomeaz"){
-                        $profiles->orderBy('name', 'ASC');
-                    }elseif($request->orderby == "nomeza"){
-                        $profiles->orderBy('name', 'DESC');
-                    }elseif($request->orderby == "idade01"){
-                        $profiles->orderBy('birth_date', 'DESC');
-                    }elseif($request->orderby == "idade10"){
-                        $profiles->orderBy('birth_date', 'ASC');
-                    }elseif($request->orderby == "distancia01"){
-                        $profiles->orderBy('distance_mi', 'ASC');
-                    }elseif($request->orderby == "distancia10"){
-                        $profiles->orderBy('distance_mi', 'DESC');
-                    }
-                    $orderby = $request->orderby;
-                }else{
-                    $profiles->orderBy('created_at', 'desc');
-                }
-                $profiles = $profiles->paginate(24);
-                return view('index', compact('profiles', 'nome', 'bio', 'idade', 'genero', 'distancia', 'orderby'));
-            }else{
-                return ("Erro. Não foi possivél acessar o seu perfil.");
+
+            $profiles = Profile::with('logged_profile:id,lat,lon');
+            $nome = null;
+            $bio = null;
+            $idade = null;
+            $genero = null;
+            $instagram = null;
+            $orderby = null;
+            if(!empty($request->nome)){
+                $profiles->where('name', 'like', '%'.$request->nome.'%');
+                $nome = $request->nome;
             }
+            if(!empty($request->bio)){
+                $profiles->where('bio', 'like', '%'.$request->bio.'%');
+                $bio = $request->bio;
+            }
+            if(!empty($request->idade)){
+                $profiles->whereYear('birth_date', (Carbon::today()->year - $request->idade - 1));
+                $idade = $request->idade;
+            }
+            if(!empty($request->genero)){
+                if($request->genero == "hm"){
+                    $profiles->whereHas('logged_profile', function ($query) {
+                        $query->where('gender', 1);
+                    });
+                    $profiles->where('gender', 0);
+                }elseif($request->genero == "hh"){
+                    $profiles->whereHas('logged_profile', function ($query) {
+                        $query->where('gender', 0);
+                    });
+                    $profiles->where('gender', 0);
+                }elseif($request->genero == "mh"){
+                    $profiles->whereHas('logged_profile', function ($query) {
+                        $query->where('gender', 0);
+                    });
+                    $profiles->where('gender', 1);
+                }elseif($request->genero == "mm"){
+                    $profiles->whereHas('logged_profile', function ($query) {
+                        $query->where('gender', 1);
+                    });
+                    $profiles->where('gender', 1);
+                }elseif($request->genero == "outros"){
+                    $profiles->whereHas('logged_profile', function ($query) {
+                        $query->where('gender', '!=', 0);
+                    });
+                    $profiles->whereHas('logged_profile', function ($query) {
+                        $query->where('gender', '!=', 1);
+                    });
+                    $profiles->whereNotIn('gender', [0, 1]);
+                }
+                $genero = $request->genero;
+            }
+            if(!empty($request->instagram)){
+                if($request->instagram == "instagrams"){
+                    $profiles->where('instagram', '!=', null);
+                }elseif($request->instagram == "instagramn"){
+                    $profiles->where('instagram', null);
+                }
+                $instagram = $request->instagram;
+            }
+            if(!empty($request->orderby)){
+                if($request->orderby == "nomeaz"){
+                    $profiles->orderBy('name', 'ASC');
+                }elseif($request->orderby == "nomeza"){
+                    $profiles->orderBy('name', 'DESC');
+                }elseif($request->orderby == "idade01"){
+                    $profiles->orderBy('birth_date', 'DESC');
+                }elseif($request->orderby == "idade10"){
+                    $profiles->orderBy('birth_date', 'ASC');
+                }elseif($request->orderby == "distancia01"){
+                    $profiles->orderBy('distance_mi', 'ASC');
+                }elseif($request->orderby == "distancia10"){
+                    $profiles->orderBy('distance_mi', 'DESC');
+                }
+                $orderby = $request->orderby;
+            }else{
+                $profiles->orderBy('created_at', 'desc');
+            }
+            $profiles = $profiles->paginate(24);
+            return view('tinder-tools.index', compact('profiles', 'nome', 'bio', 'idade', 'genero', 'instagram', 'orderby'));
+            
         }
     }
 
