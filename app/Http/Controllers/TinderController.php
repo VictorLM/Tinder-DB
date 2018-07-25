@@ -13,7 +13,7 @@ use App\Like;
 use Validator;
 use Illuminate\Validation\Rule;
 
-class ClientController extends Controller
+class TinderController extends Controller
 {
     public function index(Request $request){
         $profile_id = $this->get_profile($request);
@@ -117,7 +117,7 @@ class ClientController extends Controller
     //////////////////////////////////////////////////////////////////////////////////////////////
     function request($url, $method, $body){
         //$tinder_token = DB::table('tokens')->where('name', 'Tinder Access Token')->value('value');
-        $tinder_token = "debdf3dd-9eba-4d07-a5c6-c245ab38e42b";
+        $tinder_token = "";
         $client = new Client();
         $headers = [
             'app_version'   => '6.9.4',
@@ -197,6 +197,9 @@ class ClientController extends Controller
                     'country' => $profile->pos_info->country->name ?? null,
                     'show_gender_on_profile' => $profile->show_gender_on_profile ?? null,
                     'can_create_squad' => $profile->can_create_squad ?? null,
+                    'access_token' => null,
+                    'access_token_get_at' => Carbon::parse(Carbon::now())->format('Y-m-d H:i:s') ?? null,
+                    'bot' => false,
                     'IP' => \Request::ip() ?? null,
                     'user_agent' => $request->header('User-Agent') ?? null
                 ]
@@ -320,5 +323,4 @@ class ClientController extends Controller
         $infos = $this->request($url, $method, $body);
         dd($infos);
     }
-
 }

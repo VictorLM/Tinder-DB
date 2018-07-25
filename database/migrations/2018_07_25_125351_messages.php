@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class Tokens extends Migration
+class Messages extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,7 @@ class Tokens extends Migration
      */
     public function up()
     {
-        Schema::create('tokens', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name', 255)->nullable();
-            $table->string('value', 255)->nullable();
-            $table->timestamps();
-        });
+        //
     }
 
     /**
@@ -28,6 +23,6 @@ class Tokens extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tokens');
+        //
     }
 }
