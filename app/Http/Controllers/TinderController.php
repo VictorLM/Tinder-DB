@@ -59,7 +59,7 @@ class TinderController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }else{
 
-            $profiles = Profile::with('logged_profile:id,lat,lon');
+            $profiles = Profile::with('logged_profile:id,lat,lon,gender,birth_date,city');
             $nome = null;
             $bio = null;
             $idade = null;
@@ -137,6 +137,7 @@ class TinderController extends Controller
                 $profiles->orderBy('created_at', 'desc');
             }
             $profiles = $profiles->paginate(24);
+            //dd($profiles);
             return view('tinder-tools.index', compact('profiles', 'nome', 'bio', 'idade', 'genero', 'instagram', 'orderby'));
             
         }
