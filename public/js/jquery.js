@@ -12,12 +12,32 @@ $(document).ready(function(){
     $(function () {
         $('[data-toggle="popover"]').popover()
     })
-
-    //$(".bio").highlight($.trim("anos"));
-
-    var context = document.querySelectorAll(".bio");
-    var instance = new Mark(context);
-    instance.mark("anos");
+    //MARK.JS//
+    if($( "input[name='nome']" ).val() != ""){
+        var context = document.querySelectorAll(".nome");
+        var instance = new Mark(context);
+        instance.mark($( "input[name='nome']" ).val());
+    }
+    if($( "input[name='bio']" ).val() != ""){
+        var context = document.querySelectorAll(".bio");
+        var instance = new Mark(context);
+        instance.mark($( "input[name='bio']" ).val());
+    }
+    if($( "input[name='idade']" ).val() != ""){
+        var context = document.querySelectorAll(".idade");
+        var instance = new Mark(context);
+        instance.mark($( "input[name='idade']" ).val());
+    }
+    if($( "input[name='genero']" ).val() != ""){
+        var context = document.querySelectorAll(".genero");
+        var instance = new Mark(context);
+        instance.mark("");
+    }
+    if($( "input[name='instagram']" ).val() != ""){
+        var context = document.querySelectorAll(".instagram");
+        var instance = new Mark(context);
+        instance.mark($( "input[name='instagram']" ).val());
+    }
 
 });
 

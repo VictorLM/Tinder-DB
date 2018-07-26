@@ -172,8 +172,8 @@
                                                         @else
                                                             <i class="fas fa-genderless fa-lg" title="Outros"></i>
                                                         @endif
-                                                        {{$profile->name ?? null}}, 
-                                                        {{(Carbon\Carbon::today()->year - Carbon\Carbon::parse($profile->birth_date)->year-1)  ?? null}}, 
+                                                        <span class="nome">{{$profile->name ?? null}}</span>, 
+                                                        <span class="idade">{{(Carbon\Carbon::today()->year - Carbon\Carbon::parse($profile->birth_date)->year-1)  ?? null}}</span>, 
                                                         {{round(($profile->distance_mi * 1.60934), 0) ?? null}} Km 
                                                         <a href="https://www.google.com.br/maps/search/{{$profile->logged_profile->lat ?? null}},{{$profile->logged_profile->lon ?? null}}/" target="_blank">daqui</a>
                                                     </h6>
@@ -252,7 +252,7 @@
                 </div>
                 <div class="card-footer">
                     @if(isset($profiles) && $profiles->count()>0)
-                        {!! $profiles->appends(Request::only(['nome'=>'nome', 'bio'=>'bio', 'idade'=>'idade', 'genero'=>'genero', 'distancia'=>'distancia', 'orderby'=>'orderby']))->links() !!}
+                        {!! $profiles->appends(Request::only(['nome'=>'nome', 'bio'=>'bio', 'idade'=>'idade', 'genero'=>'genero', 'distancia'=>'distancia','instagram'=>'instagram', 'orderby'=>'orderby']))->links() !!}
                     @endif
                 </div>
             </div>
