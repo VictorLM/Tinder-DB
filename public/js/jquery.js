@@ -3,11 +3,21 @@ $(document).ready(function(){
     $('.like').click(function(){
         var id = $(this).attr('data-link');
         like(id);
-     });
+    });
 
-     $('.carousel').carousel({
+    $('.carousel').carousel({
         interval: false
-      })
+    })
+
+    $(function () {
+        $('[data-toggle="popover"]').popover()
+    })
+
+    //$(".bio").highlight($.trim("anos"));
+
+    var context = document.querySelectorAll(".bio");
+    var instance = new Mark(context);
+    instance.mark("anos");
 
 });
 

@@ -180,7 +180,7 @@ class TinderController extends Controller
         //dd($profile);
         if($profile){
             $photos = array();
-            $spotify = []; //https://open.spotify.com/artist/
+            $spotify = [];
             foreach($profile->photos as $photo){
                 $photos[] = $photo->url;
             }
@@ -265,7 +265,7 @@ class TinderController extends Controller
             $logged_profile_id = $this->get_profile($request);
             foreach($recs->results as $rec){
                 $photos = [];
-                $spotify = []; //https://open.spotify.com/artist/
+                $spotify = [];
                 foreach($rec->photos as $photo){
                     $photos[] = $photo->url;
                 }

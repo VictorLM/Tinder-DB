@@ -57,6 +57,12 @@
     display: inline-block;
     vertical-align: baseline;
 }
+.popover-body{
+    font-weight: bold;
+}
+mark {
+    background-color:yellow;
+}
 @keyframes spin {
     to { transform: rotate(360deg);}
 }

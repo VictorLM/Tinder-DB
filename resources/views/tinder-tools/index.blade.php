@@ -141,7 +141,7 @@
                                                 @if(!empty($profile->photos) && count(json_decode($profile->photos))>0)
                                                     @foreach( json_decode($profile->photos) as $imagem )
                                                         <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-                                                            <img class="d-block img-fluid rounded mx-auto d-block carousel-img" src="{{ $imagem ?? null }}" alt="">
+                                                            <img class="d-block img-fluid rounded mx-auto d-block carousel-img" src="{{ str_replace('1080x1080','320x320',$imagem) }}" alt="">
                                                         </div>
                                                     @endforeach
                                                 @endif
@@ -181,7 +181,7 @@
                                             </div>
                                             <div class="row">
                                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                                        @if(!empty($profile->teasers))
+                                                    @if(!empty($profile->teasers))
                                                         @foreach(json_decode($profile->teasers) as $teaser)
                                                             @if($teaser->type != "instagram" && $teaser->type != "artists")
                                                                 <p class="teasers">{{$teaser->string}}</p>
@@ -207,8 +207,18 @@
                                                     @if(!empty($profile->instagram))
                                                         <a href="https://www.instagram.com/{{$profile->instagram}}" target="_blank"><i class="fab fa-instagram fa-2x" title="Instagram"></i></a>&nbsp;
                                                     @endif
-                                                    @if(!empty($profile->spotify))
-                                                        <a href="" target="_blank"><i class="fab fa-spotify fa-2x" title="Spotify"></i></a>
+                                                    @if(!empty(json_decode($profile->spotify)))
+                                                            @php
+                                                                $artistas= null;
+                                                            @endphp
+                                                        @foreach(json_decode($profile->spotify) as $artist)
+                                                            @php
+                                                                $artistas.= $artist->name."; ";
+                                                            @endphp
+                                                        @endforeach
+                                                        <a href="" onclick="return false;" data-container="body" data-toggle="popover" data-placement="right" data-content="{{$artistas}}">
+                                                            <i class="fab fa-spotify fa-2x" title="Spotify"></i>
+                                                        </a>
                                                     @endif
                                                 </div>
                                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
@@ -226,7 +236,7 @@
                                                 </div>
                                             </div>
                                             <ul class="list-group list-group-flush">
-                                                <li class="list-group-item text-justify"><strong>Bio:&nbsp;</strong>{{$profile->bio ?? null}}</li>
+                                                <li class="list-group-item text-justify bio"><strong>Bio:&nbsp;</strong>{{$profile->bio ?? null}}</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -252,6 +262,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js"></script>
         <script src="{{url('js/jquery.js')}}"></script>
 
     </body>
