@@ -30,14 +30,16 @@
                 <div class="card-header">
 
                     <div class="text-center row">
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-3">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3 d-none d-xl-block">
                             <img class="img-fluid index-max-height" src="{{url('images/ISWYDT.gif')}}">
                             <img class="img-fluid index-max-height" src="{{url('images/IYKWIM-MR-BEAN.jpg')}}">
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                            <span class="title-emoji">🌶️</span><h1 class="display-1 titulo inline-headers">Tinder Tools</h1><span class="title-emoji">🔥</span>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-6">
+                            <span class="title-emoji d-none d-lg-inline d-xl-inline">🌶️</span>
+                            <h1 class="display-1 titulo inline-headers">Tinder Tools</h1>
+                            <span class="title-emoji d-none d-lg-inline d-xl-inline">🔥</span>
                         </div>
-                        <div class="col-xs-0 col-sm-0 col-md-0 col-lg-3">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3 d-none d-none d-xl-block">
                             <img class="img-fluid index-max-height" src="{{url('images/LENNY-FACE.gif')}}">
                         </div>
                     </div>
