@@ -4,11 +4,11 @@ $(document).ready(function(){
         var id = $(this).attr('data-link');
         like(id);
     });
-
+    //BS CAROUSSEL NOT AUTO CHANGE
     $('.carousel').carousel({
         interval: false
     })
-
+    //SPOTIFY POPOVER
     $(function () {
         $('[data-toggle="popover"]').popover()
     })
@@ -28,17 +28,7 @@ $(document).ready(function(){
         var instance = new Mark(context);
         instance.mark($( "input[name='idade']" ).val());
     }
-    if($( "input[name='genero']" ).val() != ""){
-        var context = document.querySelectorAll(".genero");
-        var instance = new Mark(context);
-        instance.mark("");
-    }
-    if($( "input[name='instagram']" ).val() != ""){
-        var context = document.querySelectorAll(".instagram");
-        var instance = new Mark(context);
-        instance.mark($( "input[name='instagram']" ).val());
-    }
-
+    //FIM MARK.JS//
 });
 
 function like(id) {
