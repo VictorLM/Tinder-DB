@@ -15,11 +15,18 @@ use Illuminate\Validation\Rule;
 
 class TinderController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('App\Http\Middleware\token::class');
+    }
+    
     public function index(Request $request){
         $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
             ->orderBy('created_at', 'desc')
             ->paginate(24);
-        return view('tinder-tools.index', compact('profiles'));
+        $title = "| Home";
+        return view('tinder-tools.index', compact('profiles', 'title'));
         /*
         $profile_id = $this->get_profile($request);
         if($profile_id){
@@ -146,7 +153,7 @@ class TinderController extends Controller
     //////////////////////////////////////////////////////////////////////////////////////////////
     function request($url, $method, $body){
         //$tinder_token = DB::table('tokens')->where('name', 'Tinder Access Token')->value('value');
-        $tinder_token = "";
+        $tinder_token = "ffd978db-0812-4dab-9a9f-130d077f3bba";
         $client = new Client();
         $headers = [
             'app_version'   => '6.9.4',
@@ -177,7 +184,8 @@ class TinderController extends Controller
         $method = 'GET';
         $body = null;
         $profile = $this->request($url, $method, $body);
-        //dd($profile);
+        dd($profile);
+        /*
         if($profile){
             $photos = array();
             $spotify = [];
@@ -237,6 +245,7 @@ class TinderController extends Controller
         }else{
             return false;
         }
+        */
     }
 
     public function get_updates(){
