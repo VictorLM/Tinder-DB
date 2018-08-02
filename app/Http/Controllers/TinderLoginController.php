@@ -33,7 +33,7 @@ class TinderLoginController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }else{
 
-            $process = new Process('C:/Python37/python.exe C:/Users/Victor/Desktop/tinder-python.py');
+            $process = new Process('python3 /apps/tinder-python.py');
             $process->run();
 
             // executes after the command finishes
