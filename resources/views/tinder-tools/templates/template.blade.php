@@ -15,14 +15,6 @@
     </head>
     <body>
         <div class="container-fluid container-index">
-            @foreach (['danger', 'warning', 'success', 'info'] as $msg)
-                @if(Session::has('alert-' . $msg))
-                    <div class="alert alert-success alert-dismissable" style="margin-left:10px;margin-right:10px;">
-                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                        {{ Session::get('alert-' . $msg) }}
-                    </div>
-                @endif
-            @endforeach
             @yield('content')
             <br/>
         </div>

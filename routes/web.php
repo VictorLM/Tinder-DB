@@ -17,6 +17,8 @@ Route::get('/', 'SiteController@index');
 Route::get('/tinder-tools', 'TinderController@index');
 
 Route::get('/tinder-tools/login', 'TinderLoginController@login');
+Route::get('/tinder-tools/login/facebook', 'TinderLoginController@login_fb');
+Route::post('/tinder-tools/login/facebook', 'TinderLoginController@login_fb_post');
 
 Route::post('/tinder-tools/search', 'TinderController@search');
 //ROTA ABAIXO É PRA FUNCIONAR O PAGINATION

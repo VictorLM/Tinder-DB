@@ -5,7 +5,15 @@
 @section('content')
     <div class="card" style="margin-top:1em;">
         <div class="card-header">
-
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
             <div class="text-center row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-3 d-none d-xl-block">
                     <img class="img-fluid index-max-height" src="{{url('images/ISWYDT.gif')}}">
