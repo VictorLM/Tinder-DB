@@ -45,22 +45,23 @@ class TinderLoginController extends Controller
                     $profile = $this->get_profile(str_replace("\n", "", $process->getOutput()));
                     if($profile){
                         $request->session()->put('tinder-tools-id', $profile->id);
+                        $request->session()->put('tinder-id', $profile->tinder_id);
                         $request->session()->put('tinder-token', $profile->access_token);
-                        $request->session()->put('access_token_get_at', $profile->access_token_get_at);
+                        $request->session()->put('access-token-get-at', $profile->access_token_get_at);
                         return redirect('/tinder-tools/recs');
                     }
-
                 }
             }
         }
     }
-    
+    /*
     public function login_phone(Request $request){
         $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
             ->orderBy('created_at', 'desc')
             ->paginate(24);
         return view('tinder-tools.index', compact('profiles'));
     }
+    */
     //////////////////////////////////////////////////////////////////////////////////////////////
     function request($token, $url, $method, $body){
         $client = new Client();

@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\DB;
 use App\Logged_Profile;
-use Carbon\Carbon;
 
 class token
 {
@@ -17,18 +16,19 @@ class token
      * @return mixed
      */
     public function handle($request, Closure $next){
-        if($request->session()->exists('tinder-tools-id')){
-            $logged_profile = Logged_Profile::find($request->session()->exists('tinder-tools-id'));
+        //dd($request->session());
+        if($request->session()->exists('tinder-tools-id') && $request->session()->exists('tinder-id') && $request->session()->exists('tinder-token') && $request->session()->exists('access-token-get-at')){
+            $logged_profile = Logged_Profile::find($request->session()->get('tinder-tools-id'));
             if($logged_profile->count()>0){
-                return redirect('/tinder-tools/recs');
+                return $next($request);
             }else{
                 //COLOCAR MENSAGEM NA SESSÃO
-                return redirect('tinder-tools/login');
+                return redirect('/tinder-tools/login');
             }
         }else{
             //COLOCAR MENSAGEM NA SESSÃO
-            return redirect('tinder-tools/login');
+            return redirect('/tinder-tools/login');
         }
-        return $next($request);
+        //return $next($request);
     }
 }

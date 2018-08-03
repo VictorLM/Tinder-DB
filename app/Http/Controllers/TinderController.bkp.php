@@ -15,44 +15,22 @@ use Illuminate\Validation\Rule;
 
 class TinderController extends Controller
 {
+    
     public function __construct()
     {
         $this->middleware('App\Http\Middleware\token::class');
     }
-    //////////////////////////////////////////////////////////////////////////////////////////////
-    function request($url, $method, $body, $token){
-        $client = new Client();
-        $headers = [
-            'app_version'   => '6.9.4',
-            'platform'      => 'ios',
-            'content-type'  => 'application/json',
-            'User-agent'    => 'Tinder/7.5.3 (iPhone; iOS 10.3.2; Scale/2.00)',
-            'Accept'        => 'application/json',
-            'X-Auth-Token'  => $token,
-        ];
-        try{
-            $response = $client->request($method, 'https://api.gotinder.com/'.$url, [
-                'headers' => $headers,
-                'body' => $body
-            ]);
-            if($response->getStatusCode() == 200){
-                $response = json_decode($response->getBody());
-                return($response);
-            }
-        }catch (Exception $e){
-            report($e);
-            return false;
-        }
-    }
-    //////////////////////////////////////////////////////////////////////////////////////////////
+    
     public function index(Request $request){
-        if(Carbon::parse($request->session()->get('access-token-get-at'))->diffInHours(Carbon::now()) < 12){
-
-            for($i=0;$i<3;$i++){
-                $this->get_recomendations($request->session()->get('tinder-tools-id'), $request->session()->get('tinder-token'));
-            }
-
-            $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-id'))->pluck('id')->all();
+        $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
+            ->orderBy('created_at', 'desc')
+            ->paginate(24);
+        $title = "| Home";
+        return view('tinder-tools.index', compact('profiles', 'title'));
+        /*
+        $profile_id = $this->get_profile($request);
+        if($profile_id){
+            $logged_profile_ids = Logged_Profile::where('tinder_id', $profile_id->tinder_id)->pluck('id')->all();
             $liked_ids = Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
             $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
                 ->whereNotIn('id', $liked_ids)
@@ -60,60 +38,10 @@ class TinderController extends Controller
                 ->paginate(24);
             return view('tinder-tools.index', compact('profiles'));
         }else{
-            return redirect('/tinder-tools/login');
+            return ("Erro. Não foi possivél acessar o seu perfil.");
         }
+        */
     }
-
-    function get_recomendations($logged_profile_id, $token){
-        $url = 'user/recs';
-        $method = 'GET';
-        $body = null;
-        $recs = $this->request($url, $method, $body, $token);
-        //dd($recs);
-        if($recs){
-            foreach($recs->results as $rec){
-                $photos = [];
-                $spotify = [];
-                foreach($rec->photos as $photo){
-                    $photos[] = $photo->url;
-                }
-                if(isset($rec->spotify_theme_track->artists)){
-                    foreach($rec->spotify_theme_track->artists as $artist){
-                        $spotify[] = $artist;
-                    }
-                }
-                Profile::updateOrCreate(
-                    ['tinder_id' => $rec->_id],
-                    [
-                        'logged_profile_id' => $logged_profile_id ?? null,
-                        'tinder_id' => $rec->_id ?? null,
-                        'group_matched' => $rec->group_matched ?? null,
-                        'distance_mi' => $rec->distance_mi ?? null,
-                        'content_hash' => $rec->content_hash ?? null,
-                        'common_friends' => json_encode($rec->common_friends ?? null),
-                        'common_likes' => json_encode($rec->common_likes ?? null),
-                        'common_friend_count' => $rec->common_friend_count ?? null,
-                        'common_like_count' => $rec->common_like_count ?? null,
-                        'connection_count' => $rec->connection_count ?? null,
-                        'bio' => $rec->bio ?? null,
-                        'birth_date' => Carbon::parse($rec->birth_date)->format('Y-m-d H:i:s') ?? null,
-                        'name' => $rec->name ?? null,
-                        'ping_time' => Carbon::parse($rec->ping_time)->format('Y-m-d H:i:s') ?? null,
-                        'photos' => json_encode($photos) ?? null,
-                        'instagram' => $rec->instagram->username ?? null,
-                        'spotify' => json_encode($spotify) ?? null,
-                        'jobs' => json_encode($rec->jobs ?? null),
-                        'schools' => json_encode($rec->schools ?? null),
-                        'teasers' => json_encode($rec->teasers ?? null),
-                        'gender' => $rec->gender ?? null,
-                        'birth_date_info' => $rec->birth_date_info ?? null,
-                        's_number' => $rec->s_number ?? null
-                    ]
-                );
-            }
-        }
-    }
-
 
     public function search(Request $request){
         $validatedData = Validator::make($request->all(), [
@@ -222,7 +150,34 @@ class TinderController extends Controller
         }
     }
 
-    
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    function request($url, $method, $body){
+        //$tinder_token = DB::table('tokens')->where('name', 'Tinder Access Token')->value('value');
+        $tinder_token = "ffd978db-0812-4dab-9a9f-130d077f3bba";
+        $client = new Client();
+        $headers = [
+            'app_version'   => '6.9.4',
+            'platform'      => 'ios',
+            'content-type'  => 'application/json',
+            'User-agent'    => 'Tinder/7.5.3 (iPhone; iOS 10.3.2; Scale/2.00)',
+            'Accept'        => 'application/json',
+            'X-Auth-Token'  => $tinder_token,
+        ];
+        try{
+            $response = $client->request($method, 'https://api.gotinder.com/'.$url, [
+                'headers' => $headers,
+                'body' => $body
+            ]);
+            if($response->getStatusCode() == 200){
+                $response = json_decode($response->getBody());
+                return($response);
+            }
+        }catch (Exception $e){
+            report($e);
+            return false;
+        }
+    }
+    //////////////////////////////////////////////////////////////////////////////////////////////
     ////TIRAR O PÚBLIC E VER COMO PEGAR O REQUEST->AGENT
     public function get_profile(Request $request){
         $url = 'profile';
@@ -308,6 +263,57 @@ class TinderController extends Controller
         $infos = $this->request($url, $method, $body);
         dd($infos);
     }
+
+    public function get_recomendations(Request $request){
+        $url = 'user/recs';
+        $method = 'GET';
+        $body = null;
+        $recs = $this->request($url, $method, $body);
+        //dd($recs);
+        if($recs){
+            $logged_profile_id = $this->get_profile($request);
+            foreach($recs->results as $rec){
+                $photos = [];
+                $spotify = [];
+                foreach($rec->photos as $photo){
+                    $photos[] = $photo->url;
+                }
+                if(isset($rec->spotify_theme_track->artists)){
+                    foreach($rec->spotify_theme_track->artists as $artist){
+                        $spotify[] = $artist;
+                    }
+                }
+                Profile::updateOrCreate(
+                    ['tinder_id' => $rec->_id],
+                    [
+                        'logged_profile_id' => $logged_profile_id->id ?? null,
+                        'tinder_id' => $rec->_id ?? null,
+                        'group_matched' => $rec->group_matched ?? null,
+                        'distance_mi' => $rec->distance_mi ?? null,
+                        'content_hash' => $rec->content_hash ?? null,
+                        'common_friends' => json_encode($rec->common_friends ?? null),
+                        'common_likes' => json_encode($rec->common_likes ?? null),
+                        'common_friend_count' => $rec->common_friend_count ?? null,
+                        'common_like_count' => $rec->common_like_count ?? null,
+                        'connection_count' => $rec->connection_count ?? null,
+                        'bio' => $rec->bio ?? null,
+                        'birth_date' => Carbon::parse($rec->birth_date)->format('Y-m-d H:i:s') ?? null,
+                        'name' => $rec->name ?? null,
+                        'ping_time' => Carbon::parse($rec->ping_time)->format('Y-m-d H:i:s') ?? null,
+                        'photos' => json_encode($photos) ?? null,
+                        'instagram' => $rec->instagram->username ?? null,
+                        'spotify' => json_encode($spotify) ?? null,
+                        'jobs' => json_encode($rec->jobs ?? null),
+                        'schools' => json_encode($rec->schools ?? null),
+                        'teasers' => json_encode($rec->teasers ?? null),
+                        'gender' => $rec->gender ?? null,
+                        'birth_date_info' => $rec->birth_date_info ?? null,
+                        's_number' => $rec->s_number ?? null
+                    ]
+                );
+            }
+        }
+    }
       
     public function like(Request $request, $id){
         $logged_profile_id = $this->get_profile($request);
@@ -348,4 +354,11 @@ class TinderController extends Controller
         */
     }
 
+    public function teste(){
+        $url = '';
+        $method = 'GET';
+        $body = null;
+        $infos = $this->request($url, $method, $body);
+        dd($infos);
+    }
 }
