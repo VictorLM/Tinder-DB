@@ -33,7 +33,7 @@ class TinderLoginController extends Controller
         if ($validatedData->fails()){
             return redirect()->back()->withErrors($validatedData)->withInput();
         }else{
-            $process = new Process('python3 /apps/tinder-python2.py '.$request->email.' '.$request->senha);
+            $process = new Process('python3 /apps/tinder-python.py '.$request->email.' '.$request->senha);
             $process->run();
             if (!$process->isSuccessful()) {
                 throw new ProcessFailedException($process);
