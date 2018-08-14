@@ -8,9 +8,8 @@ class SiteController extends Controller
 {
 
     public function index(Request $request){
-        return("EM CONSTRUÇÃO");
-        //$title = "TESTE";
-        //return view('index', compact('title'));
+        $title = "Sites Campinas";
+        return view('site.index', compact('title'));
     }
 
     public function teste(Request $request){
