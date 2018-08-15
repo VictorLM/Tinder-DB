@@ -82,17 +82,6 @@ class TinderLoginController extends Controller
                     $phone = $request->phone;
                     $log_code = str_replace("\n", "", $process->getOutput());
                     return view('tinder-tools.confirm_phone', compact('title', 'phone', 'log_code'));
-                    //dd($process->getOutput());
-                    /*
-                    $profile = $this->get_profile(str_replace("\n", "", $process->getOutput()));
-                    if($profile){
-                        $request->session()->put('tinder-tools-id', $profile->id);
-                        $request->session()->put('tinder-id', $profile->tinder_id);
-                        $request->session()->put('tinder-token', $profile->access_token);
-                        $request->session()->put('access-token-get-at', $profile->access_token_get_at);
-                        return redirect('/tinder-tools/recs');
-                    }
-                    */
                 }
             }
         }
@@ -130,7 +119,6 @@ class TinderLoginController extends Controller
             }
         }
     }
-
     /*
     public function login_phone(Request $request){
         $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')

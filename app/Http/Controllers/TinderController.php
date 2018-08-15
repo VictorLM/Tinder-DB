@@ -48,11 +48,10 @@ class TinderController extends Controller
     public function index(Request $request){
         if(Carbon::parse($request->session()->get('access-token-get-at'))->diffInHours(Carbon::now()) < 12){
 
-            for($i=0;$i<3;$i++){
-                $this->get_recomendations($request->session()->get('tinder-tools-id'), $request->session()->get('tinder-token'));
-            }
+            $this->get_recomendations($request->session()->get('tinder-tools-id'), $request->session()->get('tinder-token'));
 
             $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-id'))->pluck('id')->all();
+            dd($logged_profile_ids);
             $liked_ids = Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
             $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
                 ->whereNotIn('id', $liked_ids)
