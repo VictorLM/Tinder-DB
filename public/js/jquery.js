@@ -1,6 +1,6 @@
 $(document).ready(function(){
     recs();
-    
+
     $('.like').click(function(){
         var id = $(this).attr('data-link');
         like(id);
@@ -65,7 +65,7 @@ function like_response(response, id) {
 
 function recs() {
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: './tinder-tools/recs',
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         dataType: "html",

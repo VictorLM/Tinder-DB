@@ -29,7 +29,7 @@ Route::post('/tinder-tools/login/telefone/confirmar', 'TinderLoginController@con
 Route::post('/tinder-tools/search', 'TinderController@search');
 //ROTA ABAIXO É PRA FUNCIONAR O PAGINATION
 Route::get('/tinder-tools/search', 'TinderController@search');
-Route::any('/tinder-tools/recs', 'TinderController@ajax_recomendations');///ALTERAR PARA POST APÓS TESTES
+Route::get('/tinder-tools/recs', 'TinderController@ajax_recomendations');
 
 /*
 Route::get('/tinder-tools', 'TinderController@index');
