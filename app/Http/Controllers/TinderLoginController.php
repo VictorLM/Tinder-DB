@@ -18,7 +18,7 @@ class TinderLoginController extends Controller
     function is_logged(Request $request){
         if($request->session()->exists('tinder-tools') && Carbon::parse($request->session()->get('tinder-tools')['access-token-get-at'])->diffInHours(Carbon::now()) < 12){
             $logged_profile = Logged_Profile::find($request->session()->get('tinder-tools')['tinder-tools-id']);
-            if($logged_profile->count()>0){
+            if(!empty($logged_profile)){
                 return true;
             }else{
                 return false;
@@ -92,7 +92,7 @@ class TinderLoginController extends Controller
                                 "country" => $profile->country
                             );
                             $request->session()->put('tinder-tools', $tinder_tools);
-                            return redirect('/tinder-tools/recs');
+                            return redirect('/tinder-tools');
                         }
                     }
                 }
@@ -170,7 +170,7 @@ class TinderLoginController extends Controller
                                 "country" => $profile->country
                             );
                             $request->session()->put('tinder-tools', $tinder_tools);
-                            return redirect('/tinder-tools/recs');
+                            return redirect('/tinder-tools');
                         }
                     }
                 }

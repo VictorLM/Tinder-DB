@@ -13,11 +13,23 @@ class SiteController extends Controller
     }
 
     public function teste(Request $request){
-        $request->session()->put('tinder-tools-id', 1);
-        $request->session()->put('tinder-id', "5b4e2fba3dc09c0e2df558a5");
-        $request->session()->put('tinder-token', "654dcc1b-9839-461c-b5cd-fef35ac3617f");
-        $request->session()->put('access-token-get-at', "2018-08-03 12:00:09");
-        return redirect('/tinder-tools/recs');
+        //dd($request->session());
+        $request->session()->forget('tinder-tools');
+        $tinder_tools = array (
+            "tinder-id" => "5b22a4a3fe07453631d88ea8",
+            "tinder-tools-id" => 6,
+            "tinder-token" => "77184814-ae23-4405-a3fd-9285075c0f3c",
+            "access-token-get-at" => "2018-08-15 20:43:46",
+            "birth_date" => null,
+            "gender" => null,
+            "name" => null,
+            "photos" => null,
+            "ping_time" => null,
+            "city" => null,
+            "country" => null
+        );
+        $request->session()->put('tinder-tools', $tinder_tools);
+        return redirect('/tinder-tools');
     }
 
 }

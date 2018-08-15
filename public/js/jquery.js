@@ -1,5 +1,6 @@
 $(document).ready(function(){
     recs();
+    setInterval(function(){recs();}, 5000);
 
     $('.like').click(function(){
         var id = $(this).attr('data-link');

@@ -57,8 +57,9 @@ class TinderController extends Controller
     }
 
     public function ajax_recomendations(Request $request){
-        //dd($request);
-        return ($this->get_recomendations($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']));//JSON
+        $recs = $this->get_recomendations($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']);
+        return json_encode($recs);
+        //COMO RETORNAR SO AS DIFERENTES?
     }
 
     function get_recomendations($logged_profile_id, $token){
@@ -66,7 +67,7 @@ class TinderController extends Controller
         $method = 'GET';
         $body = null;
         $recs = $this->request($url, $method, $body, $token);
-        //dd($recs);
+        $result = [];
         if($recs){
             foreach($recs->results as $rec){
                 $photos = [];
@@ -79,7 +80,7 @@ class TinderController extends Controller
                         $spotify[] = $artist;
                     }
                 }
-                Profile::updateOrCreate(
+                $result[] = Profile::updateOrCreate(
                     ['tinder_id' => $rec->_id],
                     [
                         'logged_profile_id' => $logged_profile_id ?? null,
@@ -108,6 +109,7 @@ class TinderController extends Controller
                     ]
                 );
             }
+            return($result);
         }
     }
 
