@@ -1,5 +1,6 @@
 $(document).ready(function(){
-
+    recs();
+    
     $('.like').click(function(){
         var id = $(this).attr('data-link');
         like(id);
@@ -60,5 +61,24 @@ function like_response(response, id) {
         $("#div-loader-"+id).hide(200);
         alert("ERRO! ATUALIZE A PÁGINA OU TENTE NOVAMENTE MAIS TARDE.");
     }
-    
+}
+
+function recs() {
+    $.ajax({
+        type: "POST",
+        url: './tinder-tools/recs',
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        dataType: "html",
+        beforeSend: function() {
+        },
+        complete: function() {
+        },
+        success: function(response){
+            recs_response(response);
+        }
+    })
+};
+
+function recs_response(response) {
+    console.log(jQuery.parseJSON(response));
 }

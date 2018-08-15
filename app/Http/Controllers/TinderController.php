@@ -57,8 +57,8 @@ class TinderController extends Controller
     }
 
     public function ajax_recomendations(Request $request){
-        $this->get_recomendations($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']);
-        return null;//JSON
+        //dd($request);
+        return ($this->get_recomendations($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']));//JSON
     }
 
     function get_recomendations($logged_profile_id, $token){
