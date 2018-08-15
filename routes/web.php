@@ -22,6 +22,8 @@ Route::post('/tinder-tools/login/facebook', 'TinderLoginController@login_fb_post
 //FALTA AUTENTICAÇÃO PELO CELULAR
 Route::get('/tinder-tools/recs', 'TinderController@index');
 Route::post('/tinder-tools/search', 'TinderController@search');
+//ROTA ABAIXO É PRA FUNCIONAR O PAGINATION
+Route::get('/tinder-tools/search', 'TinderController@search');
 
 /*
 Route::get('/tinder-tools', 'TinderController@index');
