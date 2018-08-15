@@ -51,10 +51,10 @@ class TinderController extends Controller
             $this->get_recomendations($request->session()->get('tinder-tools-id'), $request->session()->get('tinder-token'));
 
             $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-id'))->pluck('id')->all();
-            dd($logged_profile_ids);
             $liked_ids = Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
             $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
                 ->whereNotIn('id', $liked_ids)
+                ->whereIn('logged_profile_id', $logged_profile_ids)
                 ->orderBy('created_at', 'desc')
                 ->paginate(24);
             return view('tinder-tools.index', compact('profiles'));
