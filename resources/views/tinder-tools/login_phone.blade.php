@@ -12,20 +12,16 @@
                     </ul>
                 </div>
             @endif
-            <form class="form-signin" method="POST" action="{{action('TinderLoginController@login_fb_post')}}">
+            <form class="form-signin" method="POST" action="{{action('TinderLoginController@login_phone_post')}}">
                 {{ csrf_field() }}
                 <div class="text-center mb-4">
-                    <i class="fab fa-facebook-square fa-4x" style="color:blue;"></i>
+                    <i class="fa fa-mobile-alt fa-4x"></i>
                 </div>
                 <div class="form-label-group">
-                    <input type="email" name="email" class="form-control" placeholder="E-mail" maxlength="50" value="{{old("email")}}" required autofocus>
-                    <label for="inputEmail">E-mail</label>
+                    <input type="phone" name="phone" class="form-control" placeholder="(99) 99999-9999" maxlength="15" value="{{old("phone")}}" required autofocus>
+                    <label for="inputEmail">Telefone</label>
                 </div>
-                <div class="form-label-group">
-                    <input type="password" name="senha" class="form-control" placeholder="Senha" maxlength="50" required>
-                    <label for="inputPassword">Senha</label>
-                </div>
-                <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Enviar</button>
                 <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
             </form>
         </div>

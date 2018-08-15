@@ -24,6 +24,11 @@ class TinderLoginController extends Controller
         return view('tinder-tools.login_fb', compact('title'));
     }
 
+    public function login_phone(Request $request){
+        $title = "| Login Telefone";
+        return view('tinder-tools.login_phone', compact('title'));
+    }
+
     public function login_fb_post(Request $request){
         $validatedData = Validator::make($request->all(), [
             'email' => 'required|email|max:50',
@@ -54,6 +59,78 @@ class TinderLoginController extends Controller
             }
         }
     }
+
+    public function login_phone_post(Request $request){
+        $validatedData = Validator::make($request->all(), [
+            'phone' => 'required|string|max:15',
+        ]);
+
+        if ($validatedData->fails()){
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }else{
+            $process = new Process('python3 /apps/Tinder-DB/python/phone-login-send-code.py '.$request->phone);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+                return redirect()->back()->withErrors(['Ocorreu um erro. Verifique se os dados digitados estão corretos ou tente novamente mais tarde.'])->withInput();
+            }else{
+                if(strpos($process->getOutput(), 'error') !== false){
+                    return redirect()->back()->withErrors(['Ocorreu um erro. Verifique se os dados digitados estão corretos ou tente novamente mais tarde.'])->withInput();
+                }else{
+                    $title = "| Confirmar Telefone";
+                    $phone = $request->phone;
+                    $log_code = str_replace("\n", "", $process->getOutput());
+                    return view('tinder-tools.confirm_phone', compact('title', 'phone', 'log_code'));
+                    //dd($process->getOutput());
+                    /*
+                    $profile = $this->get_profile(str_replace("\n", "", $process->getOutput()));
+                    if($profile){
+                        $request->session()->put('tinder-tools-id', $profile->id);
+                        $request->session()->put('tinder-id', $profile->tinder_id);
+                        $request->session()->put('tinder-token', $profile->access_token);
+                        $request->session()->put('access-token-get-at', $profile->access_token_get_at);
+                        return redirect('/tinder-tools/recs');
+                    }
+                    */
+                }
+            }
+        }
+    }
+
+    public function confirm_login_phone(Request $request){
+        $validatedData = Validator::make($request->all(), [
+            'code' => 'required|string|max:100',
+            'phone' => 'required|string|max:15',
+            'log_code' => 'required|string|max:100'
+        ]);
+
+        if ($validatedData->fails()){
+            return redirect()->back()->withErrors($validatedData)->withInput();
+        }else{
+            $process = new Process('python3 /apps/Tinder-DB/python/phone-login-confirm-code.py '.$request->log_code.' '.$request->phone.' '.$request->code);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new ProcessFailedException($process);
+                return redirect()->back()->withErrors(['Ocorreu um erro. Verifique se os dados digitados estão corretos ou tente novamente mais tarde.'])->withInput();
+            }else{
+                if(strpos($process->getOutput(), 'error') !== false){
+                    return redirect()->back()->withErrors(['Ocorreu um erro. Verifique se os dados digitados estão corretos ou tente novamente mais tarde.'])->withInput();
+                }else{
+                    $profile = $this->get_profile(str_replace("\n", "", $process->getOutput()));
+                    if($profile){
+                        $request->session()->put('tinder-tools-id', $profile->id);
+                        $request->session()->put('tinder-id', $profile->tinder_id);
+                        $request->session()->put('tinder-token', $profile->access_token);
+                        $request->session()->put('access-token-get-at', $profile->access_token_get_at);
+                        return redirect('/tinder-tools/recs');
+                    }
+                }
+            }
+        }
+    }
+
     /*
     public function login_phone(Request $request){
         $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')

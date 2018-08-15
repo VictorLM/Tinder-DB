@@ -222,7 +222,6 @@ class TinderController extends Controller
         }
     }
 
-    
     ////TIRAR O PÚBLIC E VER COMO PEGAR O REQUEST->AGENT
     public function get_profile(Request $request){
         $url = 'profile';
