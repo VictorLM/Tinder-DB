@@ -15,6 +15,8 @@ Route::get('/', 'SiteController@index');
 
 Route::get('/teste', 'SiteController@teste');
 
+Route::get('/tinder-tools', 'TinderController@index');
+
 //AUTENTICAÇÃO
 Route::get('/tinder-tools/login', 'TinderLoginController@login');
 Route::get('/tinder-tools/login/facebook', 'TinderLoginController@login_fb');
