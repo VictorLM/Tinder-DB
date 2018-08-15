@@ -109,10 +109,25 @@ class TinderLoginController extends Controller
                 }else{
                     $profile = $this->get_profile(str_replace("\n", "", $process->getOutput()));
                     if($profile){
-                        $request->session()->put('tinder-tools-id', $profile->id);
-                        $request->session()->put('tinder-id', $profile->tinder_id);
-                        $request->session()->put('tinder-token', $profile->access_token);
-                        $request->session()->put('access-token-get-at', $profile->access_token_get_at);
+                        $tinder_tools = array (
+                            "logged_profile" =>
+                                array (
+                                "tinder-id" => $profile->id,
+                                "tinder-tools-id" => $profile->tinder_id,
+                                "tinder-token" => $profile->access_token,
+                                "access-token-get-at" => $profile->access_token_get_at,
+                                "birth_date" => $profile->birth_date,
+                                "gender" => $profile->gender,
+                                "name" => $profile->name,
+                                "photos" => $profile->photos,
+                                "ping_time" => $profile->ping_time,
+                                "city" => $profile->city,
+                                "country" => $profile->country
+                            )
+                        );
+
+                        $request->session()->put('tinder-tools', $tinder_tools);
+
                         return redirect('/tinder-tools/recs');
                     }
                 }

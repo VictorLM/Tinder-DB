@@ -16,8 +16,8 @@ class token
      * @return mixed
      */
     public function handle($request, Closure $next){
-        //dd($request->session());
-        if($request->session()->exists('tinder-tools-id') && $request->session()->exists('tinder-id') && $request->session()->exists('tinder-token') && $request->session()->exists('access-token-get-at')){
+        if($request->session()->exists('tinder-tools')){
+            dd($request->session());
             $logged_profile = Logged_Profile::find($request->session()->get('tinder-tools-id'));
             if($logged_profile->count()>0){
                 return $next($request);
