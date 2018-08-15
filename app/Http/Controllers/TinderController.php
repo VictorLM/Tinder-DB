@@ -44,33 +44,21 @@ class TinderController extends Controller
             return false;
         }
     }
-
-    function check_token_ttl(Request $request){
-        if(Carbon::parse($request->session()->get('access-token-get-at'))->diffInHours(Carbon::now()) < 12){
-            return true;
-        }else{
-            return redirect('/tinder-tools/login');
-        }
-    }
     //////////////////////////////////////////////////////////////////////////////////////////////
     public function index(Request $request){
-        if($this->check_token_ttl($request)){
-            $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-id'))->pluck('id')->all();
-            $liked_ids = Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
-            $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
-                ->whereNotIn('id', $liked_ids)
-                ->whereIn('logged_profile_id', $logged_profile_ids)
-                ->orderBy('created_at', 'desc')
-                ->paginate(24);
-            return view('tinder-tools.index', compact('profiles'));
-        }
+        $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-tools')['tinder-id'])->pluck('id')->all();
+        $liked_ids = Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
+        $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
+            ->whereNotIn('id', $liked_ids)
+            ->whereIn('logged_profile_id', $logged_profile_ids)
+            ->orderBy('created_at', 'desc')
+            ->paginate(24);
+        return view('tinder-tools.index', compact('profiles'));
     }
 
     public function ajax_recomendations(Request $request){
-        if($this->check_token_ttl($request)){
-            $this->get_recomendations($request->session()->get('tinder-tools-id'), $request->session()->get('tinder-token'));
-            return view('tinder-tools.index', compact('profiles'));
-        }
+        $this->get_recomendations($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']);
+        return null;//JSON
     }
 
     function get_recomendations($logged_profile_id, $token){
