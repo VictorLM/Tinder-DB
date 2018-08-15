@@ -79,8 +79,8 @@ class TinderLoginController extends Controller
                         $profile = $this->get_profile(str_replace("\n", "", $process->getOutput()));
                         if($profile){
                             $tinder_tools = array (
-                                "tinder-id" => $profile->id,
-                                "tinder-tools-id" => $profile->tinder_id,
+                                "tinder-id" => $profile->tinder_id,
+                                "tinder-tools-id" => $profile->id,
                                 "tinder-token" => $profile->access_token,
                                 "access-token-get-at" => $profile->access_token_get_at,
                                 "birth_date" => $profile->birth_date,
@@ -157,8 +157,8 @@ class TinderLoginController extends Controller
                         $profile = $this->get_profile(str_replace("\n", "", $process->getOutput()));
                         if($profile){
                             $tinder_tools = array (
-                                "tinder-id" => $profile->id,
-                                "tinder-tools-id" => $profile->tinder_id,
+                                "tinder-id" => $profile->tinder_id,
+                                "tinder-tools-id" => $profile->id,
                                 "tinder-token" => $profile->access_token,
                                 "access-token-get-at" => $profile->access_token_get_at,
                                 "birth_date" => $profile->birth_date,
