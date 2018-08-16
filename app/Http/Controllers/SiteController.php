@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 class SiteController extends Controller
 {
@@ -18,8 +19,8 @@ class SiteController extends Controller
         $tinder_tools = array (
             "tinder-id" => "5b22a4a3fe07453631d88ea8",
             "tinder-tools-id" => 6,
-            "tinder-token" => "77184814-ae23-4405-a3fd-9285075c0f3c",
-            "access-token-get-at" => "2018-08-15 20:43:46",
+            "tinder-token" => "14b900f3-7ed9-497d-8e27-83c915ab71dd",
+            "access-token-get-at" => Carbon::now(),
             "birth_date" => null,
             "gender" => null,
             "name" => null,

@@ -51,15 +51,15 @@ class TinderController extends Controller
         $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
             ->whereNotIn('id', $liked_ids)
             ->whereIn('logged_profile_id', $logged_profile_ids)
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->paginate(24);
+        //MODAL - AGUARDE - BUSCA UMAS 3X RECS DEPOIS RETORNA C/ INFINITY SCROLLING
         return view('tinder-tools.index', compact('profiles'));
     }
 
     public function ajax_recomendations(Request $request){
         $recs = $this->get_recomendations($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']);
-        return json_encode($recs);
-        //COMO RETORNAR SO AS DIFERENTES?
+        return json_encode($recs);//TALVEZ RETURN BOOLEAN PRA CHECAR SE DEU CERTO
     }
 
     function get_recomendations($logged_profile_id, $token){
@@ -212,7 +212,7 @@ class TinderController extends Controller
                 }
                 $orderby = $request->orderby;
             }else{
-                $profiles->orderBy('created_at', 'desc');
+                $profiles->orderBy('created_at', 'asc');
             }
             $profiles = $profiles->paginate(24);
             //dd($profiles);
