@@ -1,7 +1,8 @@
 $(document).ready(function(){
     recs();
+    likes_remaining();
     //setInterval(function(){recs();}, 10000);
-
+    //BOTÃO LIKE
     $('.like').click(function(){
         var id = $(this).attr('data-link');
         like(id);
@@ -10,9 +11,13 @@ $(document).ready(function(){
     $('.carousel').carousel({
         interval: false
     })
-    //SPOTIFY POPOVER
+    //PROFILE E SPOTIFY POPOVER
     $(function () {
         $('[data-toggle="popover"]').popover()
+    })
+    $('.popover').popover({
+        trigger: 'focus',
+        container: 'body'
     })
     //MARK.JS//
     if($( "input[name='nome']" ).val() != ""){
@@ -31,7 +36,7 @@ $(document).ready(function(){
         instance.mark($( "input[name='idade']" ).val());
     }
     //FIM MARK.JS//
-
+    /*
     //JSCROLL//
     $('ul.pagination').hide();
     $(function() {
@@ -47,13 +52,60 @@ $(document).ready(function(){
         });
     });
     //FIM JSCROLL//
-
+    */
 });
+
+function recs() {
+    $.ajax({
+        type: "GET",
+        url: '/tinder-tools/recs',
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        dataType: "html",
+        beforeSend: function() {
+        },
+        complete: function() {
+        },
+        success: function(response){
+            recs_response(response);
+        }
+    })
+};
+//SE NÃO FOR USAR A RESPONSE, APAGAR DEPOIS
+function recs_response(response) {
+    //CHECAR SE HOUVE ERRO NA RESPOSTA
+    console.log(jQuery.parseJSON(response));
+}
+
+function likes_remaining() {
+    $.ajax({
+        type: "GET",
+        url: '/tinder-tools/likes-remaining',
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        dataType: "html",
+        beforeSend: function() {
+        },
+        complete: function() {
+        },
+        success: function(response){
+            likes_remaining_response(response);
+        }
+    })
+};
+
+function likes_remaining_response(response) {
+    if(response != 'erro'){
+        console.log(jQuery.parseJSON(response)['rating']['likes_remaining']);
+        $("#likes_remaining").text(jQuery.parseJSON(response)['rating']['likes_remaining']);
+    }else{
+        alert("Erro ao checar seu perfil. A página será reinciada.");
+        location.reload();
+    }
+}
 
 function like(id) {
     $.ajax({
         type: "GET",
-        url: './like/'+id,
+        url: '/tinder-tools/like/'+id,
         headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
         dataType: "html",
         beforeSend: function() {
@@ -69,6 +121,7 @@ function like(id) {
 };
 
 function like_response(response, id) {
+    //CHECAR SE HOUVE ERRO NA RESPOSTA
     //console.log(jQuery.parseJSON(response));
     if(jQuery.parseJSON(response).success){
         $("#loader-"+id).hide(200);
@@ -81,22 +134,3 @@ function like_response(response, id) {
     }
 }
 
-function recs() {
-    $.ajax({
-        type: "GET",
-        url: './tinder-tools/recs',
-        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-        dataType: "html",
-        beforeSend: function() {
-        },
-        complete: function() {
-        },
-        success: function(response){
-            recs_response(response);
-        }
-    })
-};
-
-function recs_response(response) {
-    console.log(jQuery.parseJSON(response));
-}

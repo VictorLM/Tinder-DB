@@ -31,6 +31,8 @@ Route::post('/tinder-tools/search', 'TinderController@search');
 Route::get('/tinder-tools/search', 'TinderController@search');
 Route::get('/tinder-tools/recs', 'TinderController@ajax_recomendations');
 
+Route::get('/tinder-tools/likes-remaining', 'TinderController@get_meta');//PEGAR PHONE_ID
+
 /*
 Route::get('/tinder-tools', 'TinderController@index');
 Route::post('/tinder-tools/search', 'TinderController@search');

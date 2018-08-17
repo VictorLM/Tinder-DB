@@ -46,6 +46,15 @@
     margin:0;
     color: gray;
 }
+.updated_at{
+    font-size:0.8em;
+    line-height:1;
+    margin:0;
+    color: gray;
+}
+.updated_at a:hover{
+    text-decoration: none;
+}
 .titulo{
     font-family: 'Londrina Outline', cursive;
     font-weight: bold;
@@ -62,6 +71,16 @@
 }
 mark {
     background-color:yellow;
+}
+.nav-item, .nav-link{
+    transition: all 0.5s ease;
+    border-radius: 0.5em;
+}
+.nav-item:hover{
+    background-color: grey;
+}
+.nav-link:hover{
+    color: white!important;
 }
 @keyframes spin {
     to { transform: rotate(360deg);}

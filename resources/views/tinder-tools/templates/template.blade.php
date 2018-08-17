@@ -14,6 +14,7 @@
         @stack('styles')
     </head>
     <body>
+        @yield('nav-bar')
         <div class="container-fluid container-index">
             @yield('content')
             <br/>

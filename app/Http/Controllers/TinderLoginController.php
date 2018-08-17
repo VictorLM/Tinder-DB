@@ -177,14 +177,6 @@ class TinderLoginController extends Controller
             }
         }
     }
-    /*
-    public function login_phone(Request $request){
-        $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
-            ->orderBy('created_at', 'desc')
-            ->paginate(24);
-        return view('tinder-tools.index', compact('profiles'));
-    }
-    */
     //////////////////////////////////////////////////////////////////////////////////////////////
     function request($token, $url, $method, $body){
         $client = new Client();

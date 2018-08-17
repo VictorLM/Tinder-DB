@@ -14,20 +14,19 @@ class SiteController extends Controller
     }
 
     public function teste(Request $request){
-        //dd($request->session());
         $request->session()->forget('tinder-tools');
         $tinder_tools = array (
             "tinder-id" => "5b22a4a3fe07453631d88ea8",
             "tinder-tools-id" => 6,
-            "tinder-token" => "14b900f3-7ed9-497d-8e27-83c915ab71dd",
+            "tinder-token" => "848db175-7b7e-4b14-a996-3309f5ba8952",
             "access-token-get-at" => Carbon::now(),
-            "birth_date" => null,
-            "gender" => null,
-            "name" => null,
+            "birth_date" => "1994-07-30",
+            "gender" => 0,
+            "name" => "Victor",
             "photos" => null,
             "ping_time" => null,
-            "city" => null,
-            "country" => null
+            "city" => "Campinas",
+            "country" => "Brasil"
         );
         $request->session()->put('tinder-tools', $tinder_tools);
         return redirect('/tinder-tools');
