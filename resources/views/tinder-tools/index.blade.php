@@ -47,7 +47,7 @@
                         @else
                             @php $gender_logged = '<i class="fas fa-genderless fa-lg" title="Outros"></i>'; @endphp
                         @endif
-                        <a href="" onclick="return false;" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="{{Session::get('tinder-tools')['name'] ?? null}}, {{$idade_logged}}, {{$gender_logged}}" data-content="Última localização: {{Session::get('tinder-tools')['city'] ?? null}}<br/>em {{Carbon\Carbon::parse(Session::get('tinder-tools')['ping_time'])->format('d/m/Y') ?? null}}<br/>Likes restantes: XXX" data-html="true">
+                        <a href="" onclick="return false;" tabindex="0" role="button" data-toggle="popover" data-trigger="focus" title="{{Session::get('tinder-tools')['name'] ?? null}}, {{$idade_logged}}, {{$gender_logged}}" data-content="Última localização: {{Session::get('tinder-tools')['city'] ?? null}}<br/>em {{Carbon\Carbon::parse(Session::get('tinder-tools')['ping_time'])->format('d/m/Y') ?? null}}<br/>" data-html="true">
                             <i class="fas fa-user"></i>
                             {{Session::get('tinder-tools')["name"] ?? null}}
                         </a>
@@ -173,7 +173,7 @@
                                         <i class="fas fa-check fa-7x" style="color:#00ff00;"></i>
                                     </div>
                                 </div>
-                                <!--
+                                
                                 <div id="carousel-{{$profile->id}}" class="carousel slide" data-ride="carousel">
                         
                                     <ol class="carousel-indicators">
@@ -208,7 +208,7 @@
                                     </a>
                                     
                                 </div>
-                                -->
+                                
                                 <div class="card-body">
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -239,7 +239,7 @@
                                         </div>
                                     </div>
                                     <hr class="hr-card"/>
-                                    <!--
+                                    
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center actions-div">
                                             <a href="/#/{{$profile->tinder_id}}" class="float-left"><i class="fas fa-times-circle fa-3x action-icon" style="color:red;" title="Passar"></i></a>
@@ -248,7 +248,7 @@
                                         </div>
                                     </div>
                                     <hr class="hr-card"/>
-                                    -->
+                                    
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-6">
                                             <a href="https://www.google.com.br/maps/search/{{$profile->logged_profile->lat ?? null}},{{$profile->logged_profile->lon ?? null}}/" target="_blank"><i class="fas fa-map-marker-alt fa-2x" title="Localização"></i></a>&nbsp;

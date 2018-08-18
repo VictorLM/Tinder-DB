@@ -101,7 +101,7 @@ function likes_remaining_response(response) {
         location.reload();
     }
 }
-
+/*
 function like(id) {
     $.ajax({
         type: "GET",
@@ -133,4 +133,4 @@ function like_response(response, id) {
         alert("ERRO! ATUALIZE A PÁGINA OU TENTE NOVAMENTE MAIS TARDE.");
     }
 }
-
+*/
