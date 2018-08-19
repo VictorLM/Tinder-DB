@@ -34,7 +34,8 @@ Route::get('/tinder-tools/recs', 'TinderController@ajax_recomendations');
 Route::get('/tinder-tools/like/{id}', 'TinderController@like');
 Route::get('/tinder-tools/likes', 'TinderController@likes');
 
-Route::get('/tinder-tools/likes-remaining', 'TinderController@get_meta');//PEGAR PHONE_ID
+Route::get('/tinder-tools/likes-remaining', 'TinderController@likes_remaining');//PEGAR PHONE_ID
+Route::get('/tinder-tools/meta', 'TinderController@get_meta');//RATING->LIKES_REMAINING
 
 /*
 Route::get('/tinder-tools', 'TinderController@index');

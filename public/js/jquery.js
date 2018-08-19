@@ -103,21 +103,26 @@ function likes_remaining_response(response) {
 }
 
 function like(id) {
-    $.ajax({
-        type: "GET",
-        url: '/tinder-tools/like/'+id,
-        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
-        dataType: "html",
-        beforeSend: function() {
-            $("#div-loader-"+id).show(200);
-            $("#loader-"+id).show(200);
-        },
-        complete: function() {
-        },
-        success: function(response){
-            like_response(response, id);
-        }
-    })
+    if($("#likes_remaining").text() > 0){
+        $.ajax({
+            type: "GET",
+            url: '/tinder-tools/like/'+id,
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            dataType: "html",
+            beforeSend: function() {
+                $("#div-loader-"+id).show(200);
+                $("#loader-"+id).show(200);
+            },
+            complete: function() {
+            },
+            success: function(response){
+                like_response(response, id);
+            }
+        })
+    }else{
+        alert("Seu limite de likes foi atingido! Contas free do Tinder tem um limite de 100 likes a cada 12 horas. Volte mais tarde. =)");
+        likes_remaining();
+    }
 };
 
 function like_response(response, id) {
@@ -126,6 +131,7 @@ function like_response(response, id) {
         $("#loader-"+id).hide(200);
         $("#liked-"+id).show(200);
         $("#card-"+id).delay(2000).hide(200);
+        $("#likes_remaining").text($("#likes_remaining").text()-1);
     }else{
         $("#loader-"+id).hide(200);
         $("#div-loader-"+id).hide(200);

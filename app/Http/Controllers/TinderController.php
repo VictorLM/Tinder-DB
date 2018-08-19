@@ -223,7 +223,7 @@ class TinderController extends Controller
         }
     }
 
-    public function get_meta(Request $request){
+    public function likes_remaining(Request $request){
         $url = 'meta';
         $method = 'GET';
         $body = null;
@@ -231,6 +231,19 @@ class TinderController extends Controller
         $infos = $this->request($url, $method, $body, $token);
         if($infos){
             return json_encode($infos);
+        }else{
+            return ("erro");
+        }
+    }
+
+    public function get_meta(Request $request){
+        $url = 'meta';
+        $method = 'GET';
+        $body = null;
+        $token = $request->session()->get('tinder-tools')['tinder-token'];
+        $infos = $this->request($url, $method, $body, $token);
+        if($infos){
+            return dd($infos);
         }else{
             return ("erro");
         }
