@@ -202,6 +202,11 @@ class TinderLoginController extends Controller
             return false;
         }
     }
+
+    public function logout(Request $request){
+        $request->session()->forget('tinder-tools');
+        return redirect('/tinder-tools');
+    }
     //////////////////////////////////////////////////////////////////////////////////////////////
     function get_profile($token){
         $url = 'profile';
@@ -229,7 +234,9 @@ class TinderLoginController extends Controller
                     'gender' => $profile->gender,
                     'gender_filter' => $profile->gender_filter,
                     'interested_in' => json_encode($profile->interested_in),
-                    'ping_time' => Carbon::parse($profile->ping_time)->format('Y-m-d H:i:s')
+                    'at' => $profile->pos->at,
+                    'lat' => $profile->pos->lat,
+                    'lon' => $profile->pos->lon
                 ],
                 [
                     'tinder_id' => $profile->_id ?? null,

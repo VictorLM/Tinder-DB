@@ -18,7 +18,7 @@ class SiteController extends Controller
         $tinder_tools = array (
             "tinder-id" => "5b22a4a3fe07453631d88ea8",
             "tinder-tools-id" => 6,
-            "tinder-token" => "848db175-7b7e-4b14-a996-3309f5ba8952",
+            "tinder-token" => "6aa7db26-b702-4ccf-afeb-3894452de1a0",
             "access-token-get-at" => Carbon::now(),
             "birth_date" => "1994-07-30",
             "gender" => 0,

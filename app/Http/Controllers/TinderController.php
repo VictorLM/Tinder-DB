@@ -241,7 +241,8 @@ class TinderController extends Controller
         $url = 'profile';
         $method = 'GET';
         $body = null;
-        $profile = $this->request($url, $method, $body);
+        $token = $request->session()->get('tinder-tools')['tinder-token'];
+        $profile = $this->request($url, $method, $body, $token);
         dd($profile);
         /*
         if($profile){
