@@ -70,7 +70,7 @@ class TinderLoginController extends Controller
                 $process = new Process('python3 /apps/Tinder-DB/python/fb-login.py '.$request->email.' '.$request->senha);
                 $process->run();
                 if (!$process->isSuccessful()) {
-                    throw new ProcessFailedException($process);
+                    //throw new ProcessFailedException($process);
                     return redirect()->back()->withErrors(['Ocorreu um erro. Verifique se os dados digitados estão corretos ou tente novamente mais tarde.'])->withInput();
                 }else{
                     if(strpos($process->getOutput(), 'error') !== false){
@@ -115,7 +115,7 @@ class TinderLoginController extends Controller
                 $process->run();
     
                 if (!$process->isSuccessful()) {
-                    throw new ProcessFailedException($process);
+                    //throw new ProcessFailedException($process);
                     return redirect()->back()->withErrors(['Ocorreu um erro. Verifique se os dados digitados estão corretos ou tente novamente mais tarde.'])->withInput();
                 }else{
                     if(strpos($process->getOutput(), 'error') !== false){
@@ -148,7 +148,7 @@ class TinderLoginController extends Controller
                 $process->run();
     
                 if (!$process->isSuccessful()) {
-                    throw new ProcessFailedException($process);
+                    //throw new ProcessFailedException($process);
                     return redirect()->back()->withErrors(['Ocorreu um erro. Verifique se os dados digitados estão corretos ou tente novamente mais tarde.'])->withInput();
                 }else{
                     if(strpos($process->getOutput(), 'error') !== false){

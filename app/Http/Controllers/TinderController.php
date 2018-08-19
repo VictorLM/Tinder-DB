@@ -236,6 +236,40 @@ class TinderController extends Controller
         }
     }
 
+    public function like(Request $request, $id){
+        $profile = Profile::select('id','tinder_id')->where('tinder_id', $id)->first();
+        $logged_profile_id = $request->session()->get('tinder-tools')['tinder-tools-id'];
+        $url = '/like/'.$profile->tinder_id;
+        $method = 'GET';
+        $body = null;
+        $token = $request->session()->get('tinder-tools')['tinder-token'];
+        $like = $this->request($url, $method, $body, $token);
+        if($like){
+            $liked = new Like;
+            $liked->logged_profile_id = $logged_profile_id;
+            $liked->profile_id = $profile->id;
+            $liked->save();
+            return json_encode(array('success' => true));
+        }else{
+            return json_encode(array('success' => false));
+        }
+    }
+
+    public function likes(Request $request){
+        $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-tools')['tinder-id'])->pluck('id')->all();
+        $liked_ids = Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
+        $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
+                        ->whereIn('id', $liked_ids)
+                        ->whereIn('logged_profile_id', $logged_profile_ids)
+                        ->orderBy('created_at', 'asc')
+                        ->paginate(24);
+        return view('tinder-tools.likes', compact('profiles'));
+    }
+
+
+
+    //FUNÇÕES ABAIXO FALTA TRATAR
+
     ////TIRAR O PÚBLIC E VER COMO PEGAR O REQUEST->AGENT
     public function get_profile(Request $request){
         $url = 'profile';
@@ -244,67 +278,6 @@ class TinderController extends Controller
         $token = $request->session()->get('tinder-tools')['tinder-token'];
         $profile = $this->request($url, $method, $body, $token);
         dd($profile);
-        /*
-        if($profile){
-            $photos = array();
-            $spotify = [];
-            foreach($profile->photos as $photo){
-                $photos[] = $photo->url;
-            }
-            if(isset($rec->spotify_theme_track->artists)){
-                foreach($rec->spotify_theme_track->artists as $artist){
-                    $spotify[] = $artist;
-                }
-            }
-            $profile_id = Logged_Profile::updateOrCreate(
-                [
-                    'tinder_id' => $profile->_id, 
-                    'age_filter_max' => $profile->age_filter_max, 
-                    'age_filter_min' => $profile->age_filter_min, 
-                    'distance_filter' => $profile->distance_filter, 
-                    'gender' => $profile->gender,
-                    'gender_filter' => $profile->gender_filter,
-                    'interested_in' => json_encode($profile->interested_in),
-                    'ping_time' => Carbon::parse($profile->ping_time)->format('Y-m-d H:i:s')
-                ],
-                [
-                    'tinder_id' => $profile->_id ?? null,
-                    'age_filter_max' => $profile->age_filter_max ?? null,
-                    'age_filter_min' => $profile->age_filter_min ?? null,
-                    'bio' => $profile->bio ?? null,
-                    'birth_date' => Carbon::parse($profile->birth_date)->format('Y-m-d H:i:s') ?? null,
-                    'create_date' => Carbon::parse($profile->create_date)->format('Y-m-d H:i:s') ?? null,
-                    'distance_filter' => $profile->distance_filter ?? null,
-                    'email' => $profile->email ?? null,
-                    'facebook_id' => $profile->facebook_id ?? null,
-                    'gender' => $profile->gender ?? null,
-                    'gender_filter' => $profile->gender_filter ?? null,
-                    'interested_in' => json_encode($profile->interested_in ?? null),
-                    'name' => $profile->name ?? null,
-                    'photos' => json_encode($photos) ?? null,
-                    'instagram' => $profile->instagram->username ?? null,
-                    'spotify' => json_encode($spotify) ?? null,
-                    'ping_time' => Carbon::parse($profile->ping_time)->format('Y-m-d H:i:s') ?? null,
-                    'full_pos_info' => json_encode($profile->pos_info ?? null),
-                    'at' => $profile->pos->at ?? null,
-                    'lat' => $profile->pos->lat ?? null,
-                    'lon' => $profile->pos->lon ?? null,
-                    'city' => $profile->pos_info->city->name ?? null,
-                    'country' => $profile->pos_info->country->name ?? null,
-                    'show_gender_on_profile' => $profile->show_gender_on_profile ?? null,
-                    'can_create_squad' => $profile->can_create_squad ?? null,
-                    'access_token' => null,
-                    'access_token_get_at' => Carbon::parse(Carbon::now())->format('Y-m-d H:i:s') ?? null,
-                    'bot' => false,
-                    'IP' => \Request::ip() ?? null,
-                    'user_agent' => $request->header('User-Agent') ?? null
-                ]
-            );
-            return $profile_id;
-        }else{
-            return false; //NÃO PODDE RETORNAR BOOLEAN EM REQUEST
-        }
-        */
     }
 
     public function get_updates(){
@@ -317,23 +290,6 @@ class TinderController extends Controller
     }
 
       
-    public function like(Request $request, $id){
-        $logged_profile_id = $this->get_profile($request);
-        $profile = Profile::select('id','tinder_id')->where('tinder_id', $id)->first();
-        $url = '/like/'.$profile->tinder_id;
-        $method = 'GET';
-        $body = null;
-        $like = $this->request($url, $method, $body);
-        if($like){
-            $liked = new Like;
-            $liked->logged_profile_id = $logged_profile_id->id;
-            $liked->profile_id = $profile->id;
-            $liked->save();
-            return json_encode(array('success' => true));
-        }else{
-            return json_encode(array('success' => false));
-        }
-    }
     /////REVER POR CONTA DO PROFILE LOGGED ID
     public function massive_like(){
         //20/07 09H10MIN

@@ -112,6 +112,13 @@ mark {
     margin-top: 50%;
     display: none;
 }
+.over-carousel-div{
+    transform: rotate(-20deg);
+    line-height: 0.5;
+}
+.over-carousel-div img{
+    max-width: 100%;
+}
 @media (min-width: 1200px){
     .container-index {
         max-width: 1400px;

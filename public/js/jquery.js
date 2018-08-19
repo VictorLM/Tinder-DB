@@ -73,7 +73,7 @@ function recs() {
 //SE NÃO FOR USAR A RESPONSE, APAGAR DEPOIS
 function recs_response(response) {
     //CHECAR SE HOUVE ERRO NA RESPOSTA
-    console.log(jQuery.parseJSON(response));
+    //console.log(jQuery.parseJSON(response));
 }
 
 function likes_remaining() {
@@ -94,14 +94,14 @@ function likes_remaining() {
 
 function likes_remaining_response(response) {
     if(response != 'erro'){
-        console.log(jQuery.parseJSON(response)['rating']['likes_remaining']);
+        //console.log(jQuery.parseJSON(response)['rating']['likes_remaining']);
         $("#likes_remaining").text(jQuery.parseJSON(response)['rating']['likes_remaining']);
     }else{
         alert("Erro ao checar seu perfil. A página será reinciada.");
         location.reload();
     }
 }
-/*
+
 function like(id) {
     $.ajax({
         type: "GET",
@@ -121,8 +121,7 @@ function like(id) {
 };
 
 function like_response(response, id) {
-    //CHECAR SE HOUVE ERRO NA RESPOSTA
-    //console.log(jQuery.parseJSON(response));
+    //CHECAR NO CONTROLLER SE HOUVE ERRO NA RESPOSTA
     if(jQuery.parseJSON(response).success){
         $("#loader-"+id).hide(200);
         $("#liked-"+id).show(200);
@@ -133,4 +132,4 @@ function like_response(response, id) {
         alert("ERRO! ATUALIZE A PÁGINA OU TENTE NOVAMENTE MAIS TARDE.");
     }
 }
-*/
+
