@@ -39,8 +39,9 @@ Route::get('/tinder-tools/super-like/{id}', 'TinderController@super_like');
 //PASS(ES)
 Route::get('/tinder-tools/pass/{id}', 'TinderController@pass');
 
-Route::get('/tinder-tools/likes-remaining', 'TinderController@likes_remaining');//PEGAR PHONE_ID
-Route::get('/tinder-tools/meta', 'TinderController@get_meta');//RATING->LIKES_REMAINING
+
+Route::get('/tinder-tools/likes-remaining', 'TinderController@likes_remaining');
+Route::get('/tinder-tools/meta', 'TinderController@get_meta');//PEGAR PHONE_ID
 
 /*
 Route::get('/tinder-tools', 'TinderController@index');
