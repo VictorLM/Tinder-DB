@@ -53,8 +53,15 @@ class TinderController extends Controller
                         ->whereIn('logged_profile_id', $logged_profile_ids)
                         ->orderBy('created_at', 'asc')
                         ->paginate(24);
-        //MODAL - AGUARDE - BUSCA UMAS 3X RECS DEPOIS RETORNA C/ INFINITY SCROLLING
         return view('tinder-tools.index', compact('profiles'));
+    }
+
+    public function first_access(Request $request){
+        for($i=0;$i<5;$i++){
+            $recs = $this->get_recomendations($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']);
+            sleep(2);
+        }
+        return redirect('/tinder-tools');
     }
 
     public function search(Request $request){

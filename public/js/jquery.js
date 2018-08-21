@@ -1,7 +1,6 @@
 $(document).ready(function(){
-    recs();
     likes_remaining();
-    //setInterval(function(){recs();}, 10000);
+    setInterval(function(){recs();}, 10000);
     //BOTÃO LIKE
     $('.like').click(function(){
         var id = $(this).attr('data-link');
@@ -55,6 +54,22 @@ $(document).ready(function(){
     */
 });
 
+function first_access() {
+    $.ajax({
+        type: "GET",
+        url: '/tinder-tools/first-access',
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        dataType: "html",
+        beforeSend: function() {
+        },
+        complete: function() {
+        },
+        success: function(response){
+        }
+    })
+    location.reload();
+};
+
 function recs() {
     $.ajax({
         type: "GET",
@@ -94,7 +109,6 @@ function likes_remaining() {
 
 function likes_remaining_response(response) {
     if(response != 'erro'){
-        //console.log(jQuery.parseJSON(response)['rating']['likes_remaining']);
         $("#likes_remaining").text(jQuery.parseJSON(response)['rating']['likes_remaining']);
     }else{
         alert("Erro ao checar seu perfil. A página será reinciada.");

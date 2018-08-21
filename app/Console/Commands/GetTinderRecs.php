@@ -68,53 +68,55 @@ class GetTinderRecs extends Command
     {
         $bots = Logged_Profile::select('id', 'access_token', 'access_token_get_at')->where('bot', true)->get();
         foreach($bots as $bot){
-            $url = 'user/recs';
-            $method = 'GET';
-            $token = $bot->access_token;
-            $recs = $this->request($url, $method, $token);
-            if($recs){
-                foreach($recs->results as $rec){
-                    $photos = [];
-                    $spotify = []; //https://open.spotify.com/artist/
-                    foreach($rec->photos as $photo){
-                        $photos[] = $photo->url;
-                    }
-                    if(isset($rec->spotify_theme_track->artists)){
-                        foreach($rec->spotify_theme_track->artists as $artist){
-                            $spotify[] = $artist;
+            if(Carbon::parse($bot->access_token_get_at)->diffInHours(Carbon::now()) < 24){
+                $url = 'user/recs';
+                $method = 'GET';
+                $token = $bot->access_token;
+                $recs = $this->request($url, $method, $token);
+                if($recs){
+                    foreach($recs->results as $rec){
+                        $photos = [];
+                        $spotify = []; //https://open.spotify.com/artist/
+                        foreach($rec->photos as $photo){
+                            $photos[] = $photo->url;
                         }
+                        if(isset($rec->spotify_theme_track->artists)){
+                            foreach($rec->spotify_theme_track->artists as $artist){
+                                $spotify[] = $artist;
+                            }
+                        }
+                        Profile::updateOrCreate(
+                            ['tinder_id' => $rec->_id],
+                            [
+                                'logged_profile_id' => $bot->id ?? null,
+                                'tinder_id' => $rec->_id ?? null,
+                                'group_matched' => $rec->group_matched ?? null,
+                                'distance_mi' => $rec->distance_mi ?? null,
+                                'content_hash' => $rec->content_hash ?? null,
+                                'common_friends' => json_encode($rec->common_friends ?? null),
+                                'common_likes' => json_encode($rec->common_likes ?? null),
+                                'common_friend_count' => $rec->common_friend_count ?? null,
+                                'common_like_count' => $rec->common_like_count ?? null,
+                                'connection_count' => $rec->connection_count ?? null,
+                                'bio' => $rec->bio ?? null,
+                                'birth_date' => Carbon::parse($rec->birth_date)->format('Y-m-d H:i:s') ?? null,
+                                'name' => $rec->name ?? null,
+                                'ping_time' => Carbon::parse($rec->ping_time)->format('Y-m-d H:i:s') ?? null,
+                                'photos' => json_encode($photos) ?? null,
+                                'instagram' => $rec->instagram->username ?? null,
+                                'spotify' => json_encode($spotify) ?? null,
+                                'jobs' => json_encode($rec->jobs ?? null),
+                                'schools' => json_encode($rec->schools ?? null),
+                                'teasers' => json_encode($rec->teasers ?? null),
+                                'gender' => $rec->gender ?? null,
+                                'birth_date_info' => $rec->birth_date_info ?? null,
+                                's_number' => $rec->s_number ?? null
+                            ]
+                        );
                     }
-                    Profile::updateOrCreate(
-                        ['tinder_id' => $rec->_id],
-                        [
-                            'logged_profile_id' => $bot->id ?? null,
-                            'tinder_id' => $rec->_id ?? null,
-                            'group_matched' => $rec->group_matched ?? null,
-                            'distance_mi' => $rec->distance_mi ?? null,
-                            'content_hash' => $rec->content_hash ?? null,
-                            'common_friends' => json_encode($rec->common_friends ?? null),
-                            'common_likes' => json_encode($rec->common_likes ?? null),
-                            'common_friend_count' => $rec->common_friend_count ?? null,
-                            'common_like_count' => $rec->common_like_count ?? null,
-                            'connection_count' => $rec->connection_count ?? null,
-                            'bio' => $rec->bio ?? null,
-                            'birth_date' => Carbon::parse($rec->birth_date)->format('Y-m-d H:i:s') ?? null,
-                            'name' => $rec->name ?? null,
-                            'ping_time' => Carbon::parse($rec->ping_time)->format('Y-m-d H:i:s') ?? null,
-                            'photos' => json_encode($photos) ?? null,
-                            'instagram' => $rec->instagram->username ?? null,
-                            'spotify' => json_encode($spotify) ?? null,
-                            'jobs' => json_encode($rec->jobs ?? null),
-                            'schools' => json_encode($rec->schools ?? null),
-                            'teasers' => json_encode($rec->teasers ?? null),
-                            'gender' => $rec->gender ?? null,
-                            'birth_date_info' => $rec->birth_date_info ?? null,
-                            's_number' => $rec->s_number ?? null
-                        ]
-                    );
                 }
             }
         }
-
     }
+
 }

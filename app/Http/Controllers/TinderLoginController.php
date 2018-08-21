@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Client;
 use App\Logged_Profile;
+use App\Profile;
 use Validator;
 use App\Services\PayUService\Exception;
 use Symfony\Component\Process\Process;
@@ -32,8 +33,9 @@ class TinderLoginController extends Controller
         if($this->is_logged($request)){
             return redirect('/tinder-tools');
         }else{
+            $profiles = Profile::inRandomOrder()->select('id','photos')->limit(24)->get();
             $title = "| Login";
-            return view('tinder-tools.login', compact('title'));
+            return view('tinder-tools.login', compact('profiles','title'));
         }
     }
 
@@ -41,8 +43,9 @@ class TinderLoginController extends Controller
         if($this->is_logged($request)){
             return redirect('/tinder-tools');
         }else{
+            $profiles = Profile::inRandomOrder()->select('id','photos')->limit(24)->get();
             $title = "| Login Facebook";
-            return view('tinder-tools.login_fb', compact('title'));
+            return view('tinder-tools.login_fb', compact('profiles','title'));
         }
     }
 
@@ -50,8 +53,9 @@ class TinderLoginController extends Controller
         if($this->is_logged($request)){
             return redirect('/tinder-tools');
         }else{
+            $profiles = Profile::inRandomOrder()->select('id','photos')->limit(24)->get();
             $title = "| Login Telefone";
-            return view('tinder-tools.login_phone', compact('title'));
+            return view('tinder-tools.login_phone', compact('profiles','title'));
         }
     }
 

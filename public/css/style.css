@@ -119,6 +119,38 @@ mark {
 .over-carousel-div img{
     max-width: 100%;
 }
+.images-bg{
+    opacity: 0.4;
+    max-height: 100%;
+    max-width: 100%;
+    padding: 0!important;
+    margin: 0!important;
+    z-index: 0;
+    position: absolute;
+    overflow: hidden;
+}
+.col-img-bg{
+    padding: 0!important;
+    margin: 0!important;
+}
+.images-bg img{
+    width: 100%;
+    max-height: 220px;
+    padding: 0!important;
+    margin: 0!important;
+    float: left;
+}
+.login-btn-link:hover{
+    text-decoration: none;
+}
+.card-login{
+    display:inline-block;
+    margin-top: 10%;
+}
+.card-login-fb{
+    display:inline-block;
+    margin-top: 5%;
+}
 @media (min-width: 1200px){
     .container-index {
         max-width: 1400px;

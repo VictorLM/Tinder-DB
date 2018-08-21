@@ -30,6 +30,7 @@ Route::post('/tinder-tools/search', 'TinderController@search');
 //ROTA ABAIXO É PRA FUNCIONAR O PAGINATION
 Route::get('/tinder-tools/search', 'TinderController@search');
 Route::get('/tinder-tools/recs', 'TinderController@ajax_recomendations');
+Route::get('/tinder-tools/first-access', 'TinderController@first_access');
 //LIKE(S)
 Route::get('/tinder-tools/like/{id}', 'TinderController@like');
 Route::get('/tinder-tools/likes', 'TinderController@likes');
