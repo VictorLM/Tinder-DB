@@ -1,4 +1,5 @@
 <div id="fotos" class="images-bg">
+    <br/>
     <div class="row">
         @if(!empty($profiles) && count($profiles)>0)
             @foreach($profiles as $profile)

@@ -10,6 +10,8 @@ use GuzzleHttp\Client;
 use App\Profile;
 use App\Logged_Profile;
 use App\Like;
+use App\Super_Like;
+use App\Pass;
 use Validator;
 use Illuminate\Validation\Rule;
 
@@ -284,6 +286,52 @@ class TinderController extends Controller
                         ->orderBy('created_at', 'asc')
                         ->paginate(24);
         return view('tinder-tools.likes', compact('profiles'));
+    }
+
+    public function super_like(Request $request, $id){
+        $profile = Profile::select('id','tinder_id')->where('tinder_id', $id)->first();
+        $logged_profile_id = $request->session()->get('tinder-tools')['tinder-tools-id'];
+        $url = '/like/'.$profile->tinder_id.'/super';
+        $method = 'POST';
+        $body = null;
+        $token = $request->session()->get('tinder-tools')['tinder-token'];
+        $super_like = $this->request($url, $method, $body, $token);
+        if($super_like){
+            $super_liked = new Super_Like;
+            $super_liked->logged_profile_id = $logged_profile_id;
+            $super_liked->profile_id = $profile->id;
+            $super_liked->save();
+            return json_encode(array('success' => true));
+        }else{
+            return json_encode(array('success' => false));
+        }
+    }
+
+    public function super_likes(Request $request){
+        
+    }
+
+    public function pass(Request $request, $id){
+        $profile = Profile::select('id','tinder_id')->where('tinder_id', $id)->first();
+        $logged_profile_id = $request->session()->get('tinder-tools')['tinder-tools-id'];
+        $url = '/pass/'.$profile->tinder_id;
+        $method = 'GET';
+        $body = null;
+        $token = $request->session()->get('tinder-tools')['tinder-token'];
+        $pass = $this->request($url, $method, $body, $token);
+        if($pass){
+            $passed = new Pass;
+            $passed->logged_profile_id = $logged_profile_id;
+            $passed->profile_id = $profile->id;
+            $passed->save();
+            return json_encode(array('success' => true));
+        }else{
+            return json_encode(array('success' => false));
+        }
+    }
+
+    public function passes(Request $request){
+        
     }
 
 

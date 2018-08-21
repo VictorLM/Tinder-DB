@@ -1,4 +1,4 @@
-@extends('tinder-tools.templates.template-clean')
+@extends('tinder-tools.templates.template')
 
 @push('styles')
     <link href="https://fonts.googleapis.com/css?family=Londrina+Outline" rel="stylesheet">

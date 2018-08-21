@@ -1,3 +1,13 @@
+@extends('tinder-tools.templates.template')
+
+@push('styles')
+    <link href="https://fonts.googleapis.com/css?family=Londrina+Outline" rel="stylesheet">
+@endpush
+
+@section('bg-fotos')
+    @include('tinder-tools.templates.img-bg')
+@endsection
+
 @section('content')
     <div class="container text-center">
         <div class="card text-center card-login-fb">

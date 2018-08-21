@@ -6,6 +6,16 @@ $(document).ready(function(){
         var id = $(this).attr('data-link');
         like(id);
     });
+    //BOTÃO SUPER LIKE
+    $('.super-like').click(function(){
+        var id = $(this).attr('data-link');
+        super_like(id);
+    });
+    //BOTÃO PASS
+    $('.pass').click(function(){
+        var id = $(this).attr('data-link');
+        pass(id);
+    });
     //BS CAROUSSEL NOT AUTO CHANGE
     $('.carousel').carousel({
         interval: false
@@ -109,7 +119,9 @@ function likes_remaining() {
 
 function likes_remaining_response(response) {
     if(response != 'erro'){
+        console.log(jQuery.parseJSON(response));
         $("#likes_remaining").text(jQuery.parseJSON(response)['rating']['likes_remaining']);
+        //$("#super_likes_remaining").text(jQuery.parseJSON(response)['rating']['likes_remaining']);
     }else{
         alert("Erro ao checar seu perfil. A página será reinciada.");
         location.reload();
@@ -134,7 +146,7 @@ function like(id) {
             }
         })
     }else{
-        alert("Seu limite de likes foi atingido! Contas free do Tinder tem um limite de 100 likes a cada 12 horas. Volte mais tarde. =)");
+        alert("Seu limite de Likes foi atingido! Contas free do Tinder tem um limite de 100 likes a cada 12 horas. Volte mais tarde. =)");
         likes_remaining();
     }
 };
@@ -153,3 +165,71 @@ function like_response(response, id) {
     }
 }
 
+function super_like(id) {
+    //DEPLOY CAMPO SUPER LIKES REMANINGGGGGGGGGG
+    if($("#super_likes_remaining").text() > 0){
+        $.ajax({
+            type: "GET",
+            url: '/tinder-tools/super-like/'+id,
+            headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+            dataType: "html",
+            beforeSend: function() {
+                $("#div-loader-"+id).show(200);
+                $("#loader-"+id).show(200);
+            },
+            complete: function() {
+            },
+            success: function(response){
+                super_like_response(response, id);
+            }
+        })
+    }else{
+        alert("Seu limite de Super Likes foi atingido! Contas free do Tinder tem direito a apenas 1 Super Like grátis. =(");
+        likes_remaining();
+    }
+};
+
+function super_like_response(response, id) {
+    //CHECAR NO CONTROLLER SE HOUVE ERRO NA RESPOSTA
+    if(jQuery.parseJSON(response).success){
+        $("#loader-"+id).hide(200);
+        $("#liked-"+id).show(200);
+        $("#card-"+id).delay(2000).hide(200);
+        $("#super_likes_remaining").text($("#likes_remaining").text()-1);
+    }else{
+        $("#loader-"+id).hide(200);
+        $("#div-loader-"+id).hide(200);
+        alert("ERRO! ATUALIZE A PÁGINA OU TENTE NOVAMENTE MAIS TARDE.");
+    }
+}
+
+function pass(id) {
+    $.ajax({
+        type: "GET",
+        url: '/tinder-tools/pass/'+id,
+        headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
+        dataType: "html",
+        beforeSend: function() {
+            $("#div-loader-"+id).show(200);
+            $("#loader-"+id).show(200);
+        },
+        complete: function() {
+        },
+        success: function(response){
+            pass_response(response, id);
+        }
+    })
+};
+
+function pass_response(response, id) {
+    //CHECAR NO CONTROLLER SE HOUVE ERRO NA RESPOSTA
+    if(jQuery.parseJSON(response).success){
+        $("#loader-"+id).hide(200);
+        $("#liked-"+id).show(200);
+        $("#card-"+id).delay(2000).hide(200);
+    }else{
+        $("#loader-"+id).hide(200);
+        $("#div-loader-"+id).hide(200);
+        alert("ERRO! ATUALIZE A PÁGINA OU TENTE NOVAMENTE MAIS TARDE.");
+    }
+}

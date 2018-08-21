@@ -186,8 +186,8 @@
                                     
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center actions-div">
-                                            <a href="/#/{{$profile->tinder_id}}" class="float-left"><i class="fas fa-times-circle fa-3x action-icon" style="color:red;" title="Passar"></i></a>
-                                            <a href="" class=""><i class="fas fa-star fa-3x action-icon" title="Super Like"></i></a>
+                                            <a class="float_left pass" id="{{$profile->tinder_id}}" data-link="{{$profile->tinder_id}}"><i class="fas fa-times-circle fa-3x action-icon" style="color:red;" title="Passar"></i></a>
+                                            <a class="super-like" id="{{$profile->tinder_id}}" data-link="{{$profile->tinder_id}}"><i class="fas fa-star fa-3x action-icon" title="Super Like" style="color:blue;"></i></a>
                                             <a class="like float-right" id="{{$profile->tinder_id}}" data-link="{{$profile->tinder_id}}"><i class="fas fa-heart fa-3x action-icon" title="Gostar" style="color:green;"></i></a>
                                         </div>
                                     </div>

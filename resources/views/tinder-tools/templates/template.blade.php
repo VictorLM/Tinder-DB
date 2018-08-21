@@ -14,7 +14,7 @@
         @stack('styles')
     </head>
     <body>
-
+        @yield('bg-fotos')
         <nav class="navbar navbar-expand-lg navbar-light" style="background-color:#F0F0F0;border-bottom: solid 1px lightgrey;">
             <div class="container">
                 <a class="navbar-brand">🌶️🍆😏 <span class="badge badge-primary" title="Beta version">BETA</span> 👌💋🔥</a>
@@ -23,18 +23,20 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarsExample07">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/tinder-tools"><i class="fas fa-search"></i> <b>Busca</b></a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/tinder-tools/likes"><i class="fas fa-thumbs-up"></i> <b>Likes</b></a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/tinder-tools/super-likes"><i class="fas fa-heart"></i> <b>Super Likes</b></a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="/tinder-tools/likes"><i class="fab fa-hotjar"></i> <b>Matches</b></a>
-                        </li>
+                        @if(Session::has('tinder-tools'))
+                            <li class="nav-item active">
+                                    <a class="nav-link" href="/tinder-tools"><i class="fas fa-search"></i> <b>Busca</b></a>
+                                </li>
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="/tinder-tools/likes"><i class="fas fa-thumbs-up"></i> <b>Likes</b></a>
+                                </li>
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="/tinder-tools/super-likes"><i class="fas fa-heart"></i> <b>Super Likes</b></a>
+                                </li>
+                                <li class="nav-item active">
+                                    <a class="nav-link" href="/tinder-tools/likes"><i class="fab fa-hotjar"></i> <b>Matches</b></a>
+                            </li>
+                        @endif
                         <li class="nav-item active">
                             <a class="nav-link" href="#sobre" data-toggle="modal">Sobre</a>
                         </li>
@@ -65,6 +67,7 @@
                             <span>/</span>
                             <a href="/tinder-tools/logout"><i class="fas fa-sign-out-alt"></i> Sair</a>
                             <br/><small>Likes restantes: <b><span id="likes_remaining">0</span></b></small>
+                            <br/><small>Super Likes restantes: <b><span id="super_likes_remaining">0</span></b></small>
                         @else
                             <a href="/tinder-tools/login">Login</a>
                         @endif
@@ -91,7 +94,7 @@
                         </div>
                         <div class="modal-body">
                             Esse é um projeto open, colabore, não quebre a aplicação, contato @IAmDinamite, etc
-                            <p>Créditos: https://github.com/fbessez/Tinder </p>
+                            <p>Créditos: <a href="https://github.com/fbessez/Tinder" target="_blank">github.com/fbessez/Tinder</a> </p>
                         </div>
                     </div>
                 </div>
