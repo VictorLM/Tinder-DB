@@ -33,15 +33,23 @@ Route::get('/tinder-tools/recs', 'TinderController@ajax_recomendations');
 Route::get('/tinder-tools/first-access', 'TinderController@first_access');
 //LIKE(S)
 Route::get('/tinder-tools/like/{id}', 'TinderController@like');
+Route::get('/tinder-tools/like-id/{id}', 'TinderController@like_id');/////////////APAGAR DEPOIS DOS TESTES
 Route::get('/tinder-tools/likes', 'TinderController@likes');
 //SUPER(S)
 Route::get('/tinder-tools/super-like/{id}', 'TinderController@super_like');
-//PASS(ES)
+Route::get('/tinder-tools/super-likes', 'TinderController@super_likes');
+//PASS
 Route::get('/tinder-tools/pass/{id}', 'TinderController@pass');
-
-
+//MATCHES
+Route::get('/tinder-tools/matches', 'TinderController@matches');
+Route::get('/tinder-tools/ajax-matches', 'TinderController@ajax_matches');
+//AJAX LIKES E SUPERS REMAINING
 Route::get('/tinder-tools/likes-remaining', 'TinderController@likes_remaining');
+
+
+//ABERTAS PARA TESTE
 Route::get('/tinder-tools/meta', 'TinderController@get_meta');//PEGAR PHONE_ID
+Route::get('/tinder-tools/updates', 'TinderController@ajax_matches');//MATCHES
 
 /*
 Route::get('/tinder-tools', 'TinderController@index');

@@ -10,6 +10,7 @@ use GuzzleHttp\Client;
 use App\Profile;
 use App\Logged_Profile;
 use App\Like;
+use App\Match;
 use App\Super_Like;
 use App\Pass;
 use Validator;
@@ -50,8 +51,11 @@ class TinderController extends Controller
     public function index(Request $request){
         $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-tools')['tinder-id'])->pluck('id')->all();
         $liked_ids = Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
+        $super_liked_ids = Super_Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
+        $passed_ids = Pass::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
+        $not_in_ids = array_unique(array_merge($liked_ids,$super_liked_ids,$passed_ids));
         $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
-                        ->whereNotIn('id', $liked_ids)
+                        ->whereNotIn('id', $not_in_ids)
                         ->whereIn('logged_profile_id', $logged_profile_ids)
                         ->orderBy('created_at', 'asc')
                         ->paginate(24);
@@ -89,10 +93,14 @@ class TinderController extends Controller
             return redirect()->back()->withErrors($validatedData)->withInput();
         }else{
             $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-tools')['tinder-id'])->pluck('id')->all();
+            
             $liked_ids = Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
+            $super_liked_ids = Super_Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
+            $passed_ids = Pass::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
+            $not_in_ids = array_unique(array_merge($liked_ids,$super_liked_ids,$passed_ids));
 
             $profiles = Profile::with('logged_profile:id,lat,lon,gender,birth_date,city')
-                            ->whereNotIn('id', $liked_ids)
+                            ->whereNotIn('id', $not_in_ids)
                             ->whereIn('logged_profile_id', $logged_profile_ids);
             $nome = null;
             $bio = null;
@@ -245,7 +253,7 @@ class TinderController extends Controller
             return ("erro");
         }
     }
-
+    ///////////////////////////////////////////////////////////////////////
     public function get_meta(Request $request){
         $url = 'meta';
         $method = 'GET';
@@ -258,7 +266,7 @@ class TinderController extends Controller
             return ("erro");
         }
     }
-
+    ///////////////////////////////////////////////////////////////////////
     public function like(Request $request, $id){
         $profile = Profile::select('id','tinder_id')->where('tinder_id', $id)->first();
         $logged_profile_id = $request->session()->get('tinder-tools')['tinder-tools-id'];
@@ -278,15 +286,27 @@ class TinderController extends Controller
         }
     }
 
+    public function like_id(Request $request, $id){
+        $logged_profile_id = $request->session()->get('tinder-tools')['tinder-tools-id'];
+        $url = '/like/'.$id;
+        $method = 'GET';
+        $body = null;
+        $token = $request->session()->get('tinder-tools')['tinder-token'];
+        $like = $this->request($url, $method, $body, $token);
+        if($like){
+            return json_encode(array('success' => true));
+        }else{
+            return json_encode(array('success' => false));
+        }
+    }
+
     public function likes(Request $request){
         $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-tools')['tinder-id'])->pluck('id')->all();
-        $liked_ids = Like::whereIn('logged_profile_id', $logged_profile_ids)->pluck('profile_id')->all();
-        $profiles = Profile::with('logged_profile:id,lat,lon,birth_date,gender,city')
-                        ->whereIn('id', $liked_ids)
+        $likes = Like::with('logged_profile:id,lat,lon,birth_date,gender,city','profile')
                         ->whereIn('logged_profile_id', $logged_profile_ids)
                         ->orderBy('created_at', 'asc')
                         ->paginate(24);
-        return view('tinder-tools.likes', compact('profiles'));
+        return view('tinder-tools.likes', compact('likes'));
     }
 
     public function super_like(Request $request, $id){
@@ -309,7 +329,12 @@ class TinderController extends Controller
     }
 
     public function super_likes(Request $request){
-        
+        $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-tools')['tinder-id'])->pluck('id')->all();
+        $super_likes = Super_Like::with('logged_profile:id,lat,lon,birth_date,gender,city','profile')
+                        ->whereIn('logged_profile_id', $logged_profile_ids)
+                        ->orderBy('created_at', 'asc')
+                        ->paginate(24);
+        return view('tinder-tools.super_likes', compact('likes'));
     }
 
     public function pass(Request $request, $id){
@@ -331,8 +356,39 @@ class TinderController extends Controller
         }
     }
 
-    public function passes(Request $request){
-        
+    public function ajax_matches(Request $request){
+        $matches = $this->get_matches($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']);
+        return json_encode($matches);//TALVEZ RETURN BOOLEAN PRA CHECAR SE DEU CERTO
+        //IF ERROR RETORNAR ERRO PARA O JQUERY DAR UM ALERT
+    }
+
+    function get_matches($logged_profile_id, $token){
+        $url = 'updates';
+        $method = 'POST';
+        $body = '{"last_activity_date": ""}';
+        $matches = $this->request($url, $method, $body, $token);
+        dd($matches);/////////////////////////////PEGAR UM MATCH PRA VER ESTRUTURA
+        if($matches){
+            foreach($matches->results as $match){
+                Match::updateOrCreate(
+                    ['tinder_id' => $rec->_id],
+                    [
+                        'logged_profile_id' => $logged_profile_id ?? null,
+                        'tinder_id' => $rec->_id ?? null,
+                        'group_matched' => $rec->group_matched ?? null,
+                        'distance_mi' => $rec->distance_mi ?? null,
+                        'birth_date' => Carbon::parse($rec->birth_date)->format('Y-m-d H:i:s') ?? null,
+                        'name' => $rec->name ?? null,
+                        'ping_time' => Carbon::parse($rec->ping_time)->format('Y-m-d H:i:s') ?? null,
+                        'photos' => json_encode($photos) ?? null,
+             
+                    ]
+                );
+            }
+            return($matches);
+        }else{
+            return false;
+        }
     }
 
 

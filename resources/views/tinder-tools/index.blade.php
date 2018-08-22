@@ -96,7 +96,7 @@
         </div>
 
         <div class="card-body">
-            
+
             <div class="row row-eq-height">
                 @push ('scripts')
                     <script src="{{url('js/jquery.js')}}"></script>
@@ -106,8 +106,8 @@
                 @if(isset($profiles)  && $profiles->count()>0)
 
                     @foreach($profiles as $profile)
-                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3" id="card-{{$profile->tinder_id}}" style="display:grid;margin-top:0.5em;margin-bottom:0.5em;">
-    
+                        <div class="col-xs-12 col-sm-6 col-md-3 col-lg-3 profile" id="card-{{$profile->tinder_id}}">
+
                             <div class="card">
 
                                 <div class="spinner-div" id="div-loader-{{$profile->tinder_id}}">
@@ -245,11 +245,19 @@
                 @else
                     @push('scripts')
                         <script type="text/javascript">
-                            first_access();
-                            $('#loading').modal({backdrop: 'static', keyboard: false});
-                            $('#loading').modal('show');
+                            var url = $(location).attr('href'),
+                            parts = url.split("/"),
+                            last_part = parts[parts.length-1];
+                            if(last_part == "tinder-tools"){
+                                first_access();
+                                $('#loading').modal({backdrop: 'static', keyboard: false});
+                                $('#loading').modal('show');
+                            }else{
+                                $("#404-h1").text("Nenhum resultado encontrado.");
+                            }
                         </script>
                     @endpush
+                    <h2 id="404-h1" style="padding-left: 1em;padding-right: 1em;"></h2>
                 @endif
             </div>
 

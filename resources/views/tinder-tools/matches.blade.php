@@ -4,6 +4,11 @@
 @endpush
 
 @section('content')
+
+    @push ('scripts')
+        <script src="{{url('js/matches.js')}}"></script>
+    @endpush
+
     <div class="card" style="margin-top:1em;">
         <div class="card-header">
             @if ($errors->any())
@@ -29,8 +34,6 @@
                     <img class="img-fluid index-max-height" src="{{url('images/LENNY-FACE.gif')}}">
                 </div>
             </div>
-            <hr class="hr-card"/>
-            Somente os likes enviados desta plataforma
         </div>
         
         <div class="card-body">
@@ -158,7 +161,21 @@
                     @endforeach
 
                 @else
-                    <h2 style="padding-left: 1em;padding-right: 1em;">Nenhum resultado encontrado.</h2>
+                    @push('scripts')
+                        <script type="text/javascript">
+                            var url = $(location).attr('href'),
+                            parts = url.split("/"),
+                            last_part = parts[parts.length-1];
+                            if(last_part == "matches"){
+                                first_access_matches();
+                                $('#loading').modal({backdrop: 'static', keyboard: false});
+                                $('#loading').modal('show');
+                            }else{
+                                $("#404-h1").text("Nenhum resultado encontrado.");
+                            }
+                        </script>
+                    @endpush
+                    <h2 id="404-h1" style="padding-left: 1em;padding-right: 1em;"></h2>
                 @endif
             </div>
 
@@ -171,7 +188,16 @@
 
     </div>
 
-    @push ('scripts')
-        <script src="{{url('js/basic.js')}}"></script>
-    @endpush
+    <!-- First Access Matches -->
+    <div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <h3 class="text-center">Aguarde.<br/>Carregando seus Matches...</h3>
+                    <img src="{{url('images/loading.gif')}}" class="img-fluid" alt="Carregando">
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection

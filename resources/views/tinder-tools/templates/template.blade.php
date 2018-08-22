@@ -25,16 +25,16 @@
                     <ul class="navbar-nav mr-auto">
                         @if(Session::has('tinder-tools'))
                             <li class="nav-item active">
-                                    <a class="nav-link" href="/tinder-tools"><i class="fas fa-search"></i> <b>Busca</b></a>
-                                </li>
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="/tinder-tools/likes"><i class="fas fa-thumbs-up"></i> <b>Likes</b></a>
-                                </li>
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="/tinder-tools/super-likes"><i class="fas fa-heart"></i> <b>Super Likes</b></a>
-                                </li>
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="/tinder-tools/likes"><i class="fab fa-hotjar"></i> <b>Matches</b></a>
+                                <a class="nav-link" href="/tinder-tools"><i class="fas fa-search"></i> <b>Busca</b></a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/tinder-tools/likes"><i class="fas fa-thumbs-up"></i> <b>Likes</b></a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/tinder-tools/super-likes"><i class="fas fa-heart"></i> <b>Super Likes</b></a>
+                            </li>
+                            <li class="nav-item active">
+                                <a class="nav-link" href="/tinder-tools/matches"><i class="fab fa-hotjar"></i> <b>Matches</b></a>
                             </li>
                         @endif
                         <li class="nav-item active">

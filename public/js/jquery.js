@@ -1,6 +1,8 @@
 $(document).ready(function(){
+    //VERIFICA OS LIKES E SUPERS RESTANTES
     likes_remaining();
-    setInterval(function(){recs();}, 10000);
+    //PEGAS AS RECS A CADA 30 SEGUNDOS
+    setInterval(function(){recs();}, 30000);//VOLTAR ESSA FUNÇÃO
     //BOTÃO LIKE
     $('.like').click(function(){
         var id = $(this).attr('data-link');

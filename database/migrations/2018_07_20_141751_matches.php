@@ -20,8 +20,20 @@ class Matches extends Migration
             $table->foreign('logged_profile_id')->references('id')->on('logged_profiles');
             $table->unsignedInteger('profile_id')->nullable()->default(null);
             $table->foreign('profile_id')->references('id')->on('profiles');
-            $table->dateTime('date')->nullable();
-            $table->string('full_match_info', 1000)->nullable()->default(null);
+            $table->boolean('closed')->nullable()->default(null);
+            $table->integer('common_friend_count')->nullable()->default(null);
+            $table->integer('common_like_count')->nullable()->default(null);
+            $table->boolean('dead')->nullable()->default(null);
+            $table->dateTime('last_activity_date')->nullable()->default(null);
+            $table->integer('message_count')->nullable()->default(null);
+            $table->boolean('muted')->nullable()->default(null);
+            $table->string('participants', 500)->nullable()->default(null);//JSON
+            $table->boolean('pending')->nullable()->default(null);
+            $table->boolean('is_super_like')->nullable()->default(null);
+            $table->boolean('is_boost_match')->nullable()->default(null);
+            $table->boolean('is_fast_match')->nullable()->default(null);
+            $table->boolean('following')->nullable()->default(null);
+            $table->boolean('following_moments')->nullable()->default(null);
             $table->timestamps();
         });
     }
