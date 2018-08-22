@@ -125,10 +125,11 @@ class TinderLoginController extends Controller
                     if(strpos($process->getOutput(), 'error') !== false){
                         return redirect()->back()->withErrors(['Ocorreu um erro. Verifique se os dados digitados estão corretos ou tente novamente mais tarde.'])->withInput();
                     }else{
+                        $profiles = Profile::inRandomOrder()->select('id','photos')->limit(24)->get();
                         $title = "| Confirmar Telefone";
                         $phone = $request->phone;
                         $log_code = str_replace("\n", "", $process->getOutput());
-                        return view('tinder-tools.confirm_phone', compact('title', 'phone', 'log_code'));
+                        return view('tinder-tools.confirm_phone', compact('profiles','title', 'phone', 'log_code'));
                     }
                 }
             }

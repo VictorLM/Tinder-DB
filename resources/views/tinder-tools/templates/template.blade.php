@@ -47,7 +47,7 @@
                             <a class="nav-link" href="#reportar" data-toggle="modal">Reportar Erro</a>
                         </li>
                     </ul>
-                    <div class="my-2 my-md-0 text-center" style="line-height:1;">
+                    <div class="my-2 my-md-0" style="line-height:1;">
                         @if(Session::has('tinder-tools'))
                             @php
                                 $gender_logged = null;
@@ -110,7 +110,7 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            E-mail, @IAmDinamite, etc
+                            victor.meireles.dev@gmail.com, @IAmDinamite, etc
                         </div>
                     </div>
                 </div>

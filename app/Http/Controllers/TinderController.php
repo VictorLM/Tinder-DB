@@ -59,9 +59,9 @@ class TinderController extends Controller
     }
 
     public function first_access(Request $request){
-        for($i=0;$i<5;$i++){
+        for($i=0;$i<3;$i++){
             $recs = $this->get_recomendations($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']);
-            sleep(2);
+            sleep(3);
         }
         return redirect('/tinder-tools');
     }
@@ -179,6 +179,7 @@ class TinderController extends Controller
     public function ajax_recomendations(Request $request){
         $recs = $this->get_recomendations($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']);
         return json_encode($recs);//TALVEZ RETURN BOOLEAN PRA CHECAR SE DEU CERTO
+        //IF ERROR RETORNAR ERRO PARA O JQUERY DAR UM ALERT
     }
 
     function get_recomendations($logged_profile_id, $token){

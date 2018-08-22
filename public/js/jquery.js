@@ -119,9 +119,9 @@ function likes_remaining() {
 
 function likes_remaining_response(response) {
     if(response != 'erro'){
-        console.log(jQuery.parseJSON(response));
+        //console.log(jQuery.parseJSON(response));
         $("#likes_remaining").text(jQuery.parseJSON(response)['rating']['likes_remaining']);
-        //$("#super_likes_remaining").text(jQuery.parseJSON(response)['rating']['likes_remaining']);
+        $("#super_likes_remaining").text(jQuery.parseJSON(response)['rating']['super_likes']['remaining']);
     }else{
         alert("Erro ao checar seu perfil. A página será reinciada.");
         location.reload();

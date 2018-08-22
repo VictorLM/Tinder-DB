@@ -14,6 +14,7 @@ class SiteController extends Controller
     }
 
     public function teste(Request $request){
+        //dd($request->session());
         $request->session()->forget('tinder-tools');
         $tinder_tools = array (
             "tinder-id" => "5b22a4a3fe07453631d88ea8",
