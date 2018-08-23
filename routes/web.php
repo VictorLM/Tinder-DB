@@ -33,7 +33,7 @@ Route::get('/tinder-tools/recs', 'TinderController@ajax_recomendations');
 Route::get('/tinder-tools/first-access', 'TinderController@first_access');
 //LIKE(S)
 Route::get('/tinder-tools/like/{id}', 'TinderController@like');
-Route::get('/tinder-tools/like-id/{id}', 'TinderController@like_id');/////////////APAGAR DEPOIS DOS TESTES
+//Route::get('/tinder-tools/like-id/{id}', 'TinderController@like_id');/////////////APAGAR DEPOIS DOS TESTES
 Route::get('/tinder-tools/likes', 'TinderController@likes');
 //SUPER(S)
 Route::get('/tinder-tools/super-like/{id}', 'TinderController@super_like');

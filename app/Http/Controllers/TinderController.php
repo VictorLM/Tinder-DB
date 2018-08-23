@@ -285,7 +285,8 @@ class TinderController extends Controller
             return json_encode(array('success' => false));
         }
     }
-
+    /*
+    //FUNÇÃO PRA LIKER DIRETO O ID SEM REGISTRAR NO DB - SÓ PARA LIKAR ENTRE OS BOTS
     public function like_id(Request $request, $id){
         $logged_profile_id = $request->session()->get('tinder-tools')['tinder-tools-id'];
         $url = '/like/'.$id;
@@ -299,7 +300,7 @@ class TinderController extends Controller
             return json_encode(array('success' => false));
         }
     }
-
+    */
     public function likes(Request $request){
         $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-tools')['tinder-id'])->pluck('id')->all();
         $likes = Like::with('logged_profile:id,lat,lon,birth_date,gender,city','profile')
@@ -369,19 +370,30 @@ class TinderController extends Controller
         $matches = $this->request($url, $method, $body, $token);
         dd($matches);/////////////////////////////PEGAR UM MATCH PRA VER ESTRUTURA
         if($matches){
-            foreach($matches->results as $match){
+            foreach($matches->matches as $match){
+                //CHECKAR SE PERSON ESTÁ NO DB - SENÃO, PEGAR $profile_id
                 Match::updateOrCreate(
-                    ['tinder_id' => $rec->_id],
+                    ['match_id' => $match->id],
                     [
+                        'match_id' => $match->id ?? null,
                         'logged_profile_id' => $logged_profile_id ?? null,
-                        'tinder_id' => $rec->_id ?? null,
-                        'group_matched' => $rec->group_matched ?? null,
-                        'distance_mi' => $rec->distance_mi ?? null,
-                        'birth_date' => Carbon::parse($rec->birth_date)->format('Y-m-d H:i:s') ?? null,
-                        'name' => $rec->name ?? null,
-                        'ping_time' => Carbon::parse($rec->ping_time)->format('Y-m-d H:i:s') ?? null,
-                        'photos' => json_encode($photos) ?? null,
-             
+                        'profile_id' => $profile_id ?? null,
+                        'closed' => $match->closed ?? null,
+                        'common_friend_count' => $match->common_friend_count ?? null,
+                        'common_like_count' => $match->common_like_count ?? null,
+                        'created_date' => Carbon::parse($match->created_date)->format('Y-m-d H:i:s') ?? null,
+                        'dead' => $match->dead ?? null,
+                        'last_activity_date' => Carbon::parse($match->last_activity_date)->format('Y-m-d H:i:s') ?? null,
+                        'message_count' => $match->message_count ?? null,
+                        'muted' => $match->muted ?? null,
+                        'participants' => json_encode($match->participants) ?? null,
+                        'pending' => $match->pending ?? null,
+                        'is_super_like' => $match->is_super_like ?? null,
+                        'is_boost_match' => $match->is_boost_match ?? null,
+                        'is_fast_match' => $match->is_fast_match ?? null,
+                        'following' => $match->following ?? null,
+                        'following_moments' => $match->following_moments ?? null,
+                        'created_at' => Carbon::now() ?? null,
                     ]
                 );
             }

@@ -17,9 +17,9 @@ class SiteController extends Controller
         //dd($request->session());
         $request->session()->forget('tinder-tools');
         $tinder_tools = array (
-            "tinder-id" => "5b4e2fba3dc09c0e2df558a5",
+            "tinder-id" => "5b22a4a3fe07453631d88ea8",
             "tinder-tools-id" => 6,
-            "tinder-token" => "2ceed6ef-dc34-413b-bbe1-3ce2d756b45e",
+            "tinder-token" => "3cfc13aa-b2e6-4257-a6da-f39b03cee8ae",
             "access-token-get-at" => Carbon::now(),
             "birth_date" => "1994-07-30",
             "gender" => 0,
