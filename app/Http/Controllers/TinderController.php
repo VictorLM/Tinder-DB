@@ -357,8 +357,15 @@ class TinderController extends Controller
         }
     }
 
-    public function ajax_matches(Request $request){
+    public function matches(Request $request){
         $matches = $this->get_matches($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']);
+    
+        if($matches){
+
+        }else{
+            Return "ERRO";
+        }
+
         return json_encode($matches);//TALVEZ RETURN BOOLEAN PRA CHECAR SE DEU CERTO
         //IF ERROR RETORNAR ERRO PARA O JQUERY DAR UM ALERT
     }
@@ -371,7 +378,7 @@ class TinderController extends Controller
         dd($matches);/////////////////////////////PEGAR UM MATCH PRA VER ESTRUTURA
         if($matches){
             foreach($matches->matches as $match){
-                //CHECKAR SE PERSON ESTÁ NO DB - SENÃO, PEGAR $profile_id
+                //CHECKAR SE PERSON ESTÁ NO DB - SENÃO, PEGAR E RETORNAR $profile_id
                 Match::updateOrCreate(
                     ['match_id' => $match->id],
                     [

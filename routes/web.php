@@ -13,7 +13,7 @@
 
 Route::get('/', 'SiteController@index');
 
-Route::get('/teste', 'SiteController@teste');
+Route::get('/teste', 'SiteController@teste');/////////
 
 Route::get('/tinder-tools', 'TinderController@index');
 
@@ -42,14 +42,12 @@ Route::get('/tinder-tools/super-likes', 'TinderController@super_likes');
 Route::get('/tinder-tools/pass/{id}', 'TinderController@pass');
 //MATCHES
 Route::get('/tinder-tools/matches', 'TinderController@matches');
-Route::get('/tinder-tools/ajax-matches', 'TinderController@ajax_matches');
 //AJAX LIKES E SUPERS REMAINING
 Route::get('/tinder-tools/likes-remaining', 'TinderController@likes_remaining');
 
 
 //ABERTAS PARA TESTE
 Route::get('/tinder-tools/meta', 'TinderController@get_meta');//PEGAR PHONE_ID
-Route::get('/tinder-tools/updates', 'TinderController@ajax_matches');//MATCHES
 
 /*
 Route::get('/tinder-tools', 'TinderController@index');

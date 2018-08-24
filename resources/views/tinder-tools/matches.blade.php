@@ -5,10 +5,6 @@
 
 @section('content')
 
-    @push ('scripts')
-        <script src="{{url('js/matches.js')}}"></script>
-    @endpush
-
     <div class="card" style="margin-top:1em;">
         <div class="card-header">
             @if ($errors->any())
@@ -187,17 +183,7 @@
         </div>
 
     </div>
-
-    <!-- First Access Matches -->
-    <div class="modal fade" id="loading" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-body text-center">
-                    <h3 class="text-center">Aguarde.<br/>Carregando seus Matches...</h3>
-                    <img src="{{url('images/loading.gif')}}" class="img-fluid" alt="Carregando">
-                </div>
-            </div>
-        </div>
-    </div>
-
+    @push ('scripts')
+        <script src="{{url('js/basic.js')}}"></script>
+    @endpush
 @endsection
