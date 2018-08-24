@@ -48,6 +48,7 @@ Route::get('/tinder-tools/likes-remaining', 'TinderController@likes_remaining');
 
 //ABERTAS PARA TESTE
 Route::get('/tinder-tools/meta', 'TinderController@get_meta');//PEGAR PHONE_ID
+Route::get('/tinder-tools/profile', 'TinderController@get_profile');//PEGAR PHONE_ID
 
 /*
 Route::get('/tinder-tools', 'TinderController@index');

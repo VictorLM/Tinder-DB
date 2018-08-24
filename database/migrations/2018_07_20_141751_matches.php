@@ -20,6 +20,7 @@ class Matches extends Migration
             $table->foreign('logged_profile_id')->references('id')->on('logged_profiles');
             $table->unsignedInteger('profile_id')->nullable()->default(null);
             $table->foreign('profile_id')->references('id')->on('profiles');
+            $table->dateTime('created_date')->nullable()->default(null);
             $table->boolean('closed')->nullable()->default(null);
             $table->integer('common_friend_count')->nullable()->default(null);
             $table->integer('common_like_count')->nullable()->default(null);

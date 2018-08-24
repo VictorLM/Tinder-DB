@@ -357,17 +357,71 @@ class TinderController extends Controller
         }
     }
 
-    public function matches(Request $request){
-        $matches = $this->get_matches($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']);
-    
-        if($matches){
-
+    public function get_profile($profile_id, $logged_profile_id, $token){
+        $url = 'user/'.$profile_id;
+        $method = 'GET';
+        $body = null;
+        $profile = $this->request($url, $method, $body, $token);
+        if($profile){
+            $photos = [];
+            $spotify = [];
+            foreach($profile->results->photos as $photo){
+                $photos[] = $photo->url;
+            }
+            if(isset($profile->results->spotify_theme_track->artists)){
+                foreach($profile->results->spotify_theme_track->artists as $artist){
+                    $spotify[] = $artist;
+                }
+            }
+            $profile_db = Profile::updateOrCreate(
+                ['tinder_id' => $profile->results->_id],
+                [
+                    'logged_profile_id' => $logged_profile_id ?? null,
+                    'tinder_id' => $profile->results->_id ?? null,
+                    'group_matched' => $profile->results->group_matched ?? null,
+                    'distance_mi' => $profile->results->distance_mi ?? null,
+                    'content_hash' => $profile->results->content_hash ?? null,
+                    'common_friends' => json_encode($profile->results->common_friends ?? null),
+                    'common_likes' => json_encode($profile->results->common_likes ?? null),
+                    'common_friend_count' => $profile->results->common_friend_count ?? null,
+                    'common_like_count' => $profile->results->common_like_count ?? null,
+                    'connection_count' => $profile->results->connection_count ?? null,
+                    'bio' => $profile->results->bio ?? null,
+                    'birth_date' => Carbon::parse($profile->results->birth_date)->format('Y-m-d H:i:s') ?? null,
+                    'name' => $profile->results->name ?? null,
+                    'ping_time' => Carbon::parse($profile->results->ping_time)->format('Y-m-d H:i:s') ?? null,
+                    'photos' => json_encode($photos) ?? null,
+                    'instagram' => $profile->instagram->results->username ?? null,
+                    'spotify' => json_encode($spotify) ?? null,
+                    'jobs' => json_encode($profile->results->jobs ?? null),
+                    'schools' => json_encode($profile->results->schools ?? null),
+                    'teasers' => json_encode($profile->results->teasers ?? null),
+                    'gender' => $profile->results->gender ?? null,
+                    'birth_date_info' => $profile->results->birth_date_info ?? null,
+                    's_number' => $profile->results->s_number ?? null
+                ]
+            );
+            return($profile_db->id);
         }else{
-            Return "ERRO";
+            return false;
         }
+    }
 
-        return json_encode($matches);//TALVEZ RETURN BOOLEAN PRA CHECAR SE DEU CERTO
-        //IF ERROR RETORNAR ERRO PARA O JQUERY DAR UM ALERT
+    public function matches(Request $request){
+        //O PAGINATION VAI FICAR PEGANDO OS MATCHES ***
+        $get_matches = $this->get_matches($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']);
+        if($get_matches){
+            dd("TESTE");
+            //PEGAR MENSAGENS E RETORNAR TBMMMM
+            $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-tools')['tinder-id'])->pluck('id')->all();
+            $matches = Match::with('logged_profile','profile')
+                            ->whereIn('logged_profile_id', $logged_profile_ids)
+                            ->orderBy('created_at', 'desc')
+                            ->paginate(24);
+            return view('tinder-tools.matches', compact('matches'));
+        }else{
+            return "ERRORRRR";
+        }
     }
 
     function get_matches($logged_profile_id, $token){
@@ -375,10 +429,10 @@ class TinderController extends Controller
         $method = 'POST';
         $body = '{"last_activity_date": ""}';
         $matches = $this->request($url, $method, $body, $token);
-        dd($matches);/////////////////////////////PEGAR UM MATCH PRA VER ESTRUTURA
+        //dd($matches);
         if($matches){
             foreach($matches->matches as $match){
-                //CHECKAR SE PERSON ESTÁ NO DB - SENÃO, PEGAR E RETORNAR $profile_id
+                $profile_id = $this->get_profile($match->person->_id, $logged_profile_id, $token);
                 Match::updateOrCreate(
                     ['match_id' => $match->id],
                     [
@@ -404,7 +458,7 @@ class TinderController extends Controller
                     ]
                 );
             }
-            return($matches);
+            return true;
         }else{
             return false;
         }
@@ -413,16 +467,6 @@ class TinderController extends Controller
 
 
     //FUNÇÕES ABAIXO FALTA TRATAR
-
-    ////TIRAR O PÚBLIC E VER COMO PEGAR O REQUEST->AGENT
-    public function get_profile(Request $request){
-        $url = 'profile';
-        $method = 'GET';
-        $body = null;
-        $token = $request->session()->get('tinder-tools')['tinder-token'];
-        $profile = $this->request($url, $method, $body, $token);
-        dd($profile);
-    }
 
     public function get_updates(){
         $url = 'updates';
