@@ -20,7 +20,7 @@ class SiteController extends Controller
             //PURULETA
             "tinder-id" => "5b22a4a3fe07453631d88ea8",
             "tinder-tools-id" => 6,
-            "tinder-token" => "3cfc13aa-b2e6-4257-a6da-f39b03cee8ae",
+            "tinder-token" => "c0425669-0be2-4af7-afe5-79319fadb68f",
             "access-token-get-at" => Carbon::now(),
             "birth_date" => "1994-07-30",
             "gender" => 0,

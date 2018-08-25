@@ -16,7 +16,7 @@
                 <h1 class="display-4 titulo inline-headers">Tinder Tools</h1>
                 <span class="title-emoji d-none d-lg-inline d-xl-inline">🔥</span>
             </div>
-            <div class="card-body bg-light" style="padding:2em;">
+            <div class="card-body bg-light">
                 @if ($errors->any())
                     <div class="alert alert-danger">
                         <ul>
