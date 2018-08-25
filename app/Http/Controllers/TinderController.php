@@ -411,7 +411,6 @@ class TinderController extends Controller
         //O PAGINATION VAI FICAR PEGANDO OS MATCHES ***
         $get_matches = $this->get_matches($request->session()->get('tinder-tools')['tinder-tools-id'], $request->session()->get('tinder-tools')['tinder-token']);
         if($get_matches){
-            dd("TESTE");
             //PEGAR MENSAGENS E RETORNAR TBMMMM
             $logged_profile_ids = Logged_Profile::where('tinder_id', $request->session()->get('tinder-tools')['tinder-id'])->pluck('id')->all();
             $matches = Match::with('logged_profile','profile')
@@ -420,7 +419,7 @@ class TinderController extends Controller
                             ->paginate(24);
             return view('tinder-tools.matches', compact('matches'));
         }else{
-            return "ERRORRRR";
+            return view('tinder-tools.index')->withErrors(['Ocorreu um erro ao processar seus Matches. Tente novamente mais tarde.']);
         }
     }
 

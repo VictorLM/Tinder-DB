@@ -63,7 +63,7 @@
                                                 <div class="carousel-item {{$loop->first ? 'active' : ''}}">
                                                     <img class="d-block img-fluid rounded mx-auto d-block carousel-img" src="{{str_replace('1080x1080','320x320',$imagem)}}" alt="">
                                                     <div class="carousel-caption d-none d-md-block over-carousel-div">
-                                                        <img src="{{url('images/matchd.png')}}">
+                                                        <img src="{{url('images/its-a-match.png')}}">
                                                         </br><small>{{Carbon\Carbon::parse($match->created_at)->format('d/m/Y')}}</small>
                                                     </div>
                                                 </div>
@@ -105,7 +105,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                            @if(!empty($match->profile->teasers))
+                                            @if(!empty(json_decode($match->profile->teasers)))
                                                 @foreach(json_decode($match->profile->teasers) as $teaser)
                                                     @if($teaser->type != "instagram" && $teaser->type != "artists")
                                                         <p class="teasers">{{$teaser->string}}</p>
