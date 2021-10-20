@@ -17,9 +17,16 @@
 <!--ts-->
    * [Tabela de Conteúdo](#tabela-de-conteudo)
    * [Descrição](#descricao)
+   * [Preview](#preview)
    * [Tecnologias](#tecnologias)
    * [Autor](#autor)
 <!--te-->
+
+<h1 id="preview">Preview</h1>
+
+<p align="center">
+  <img src="https://i.ibb.co/MCgKw4Q/TINDER-TOOLS.gif" alt="Preview" />
+</p>
 
 <h1 id="tecnologias">Tecnologias</h1>
 
