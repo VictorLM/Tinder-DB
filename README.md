@@ -1,15 +1,19 @@
 <h3 align="center">
-    🚧  Projeto descontinuado devido às restrições impostas pelo Facebook para uso da API após o escândalo da Cambridge Analytica em 2018  🚧
+    🚧  Projeto descontinuado  🚧
 </h3>
 
+<p>
+    🚧 Os perfis que utilizei nesta aplicação foram banidos. Não recomendo usar esse código com sua conta principal.
+</p>
+
 <h1 align="center" style="border-bottom: none">
-  Festas.Fun - Encontre sua festa
+  Tinder Tools - Tinder on roids
 </h1>
 
 <h1 id="descricao">Descrição</h1>
 
 <p>
-  Buscador de festas que indexa os eventos do Facebook. O diferencial deste buscador é que ele exibe e divide a porcentagem dos confirmados de cada evento por gênero.
+  App integrado ao aplicativo de relacionamentos Tinder, com funções exclusivas e facilidades premium para quem já usa o app.
 </p>
 
 <h1 id="tabela-de-conteudo">Tabela de conteúdos</h1>
