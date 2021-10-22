@@ -3,7 +3,7 @@
 </h3>
 
 <p>
-    🚧 Os perfis que utilizei nesta aplicação foram banidos. Não recomendo usar esse código com sua conta principal.
+    🚧 Os perfis que utilizei nesta aplicação foram banidos. Não recomendo usar esse código com sua conta principal. 🚧
 </p>
 
 <h1 align="center" style="border-bottom: none">
@@ -39,7 +39,7 @@
 </p>
 
 - [PHP (7.0)](https://www.php.net/)
-- [Python (3))](https://www.python.org/)
+- [Python (3)](https://www.python.org/)
 - [Laravel (5.5)](https://laravel.com/)
 - [Symfony/Process](https://symfony.com/doc/current/components/process.html)
 - [MySQL](https://www.mysql.com/)
